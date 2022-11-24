@@ -16,7 +16,7 @@ object Transactions {
         avatar = ""
     )
 
-    var transactioninfo1 = TransactionInfo(customerId = 1, createdDate = "July", total = 8.00)
+    var transactioninfo1 = TransactionInfo(transactionId = 1, customerId = 1, createdDate = "July", total = 8.00)
     val item1 = Items(
             itemId = 1,
             transactionId = 1,

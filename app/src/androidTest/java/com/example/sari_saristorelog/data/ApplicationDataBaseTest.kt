@@ -50,12 +50,14 @@ class ApplicationDataBaseTest {
     @Test
     fun insertTransactionInfo() = runTest(UnconfinedTestDispatcher()) {
 
-        val id = dao.insertTransactionInfo(Transactions.transactioninfo1)
+        val noId = TransactionInfo(customerId = 1, createdDate = "July", total = 8.00)
+
+        val id = dao.insertTransactionInfo(noId)
 
         val transaction1 = dao.getTransactionInfoList()
-        val transactionInfo = TransactionInfo(transactionId = id, customerId = 1, createdDate = "July", total = 8.00)
+        val withId = TransactionInfo(transactionId = id, customerId = 1, createdDate = "July", total = 8.00)
 
-        assertThat(transaction1).contains(transactionInfo)
+        assertThat(transaction1).contains(withId)
     }
 
     @Test
