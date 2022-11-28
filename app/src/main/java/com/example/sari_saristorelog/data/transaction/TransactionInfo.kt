@@ -1,5 +1,6 @@
 package com.example.sari_saristorelog.data.transaction
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -8,9 +9,9 @@ data class TransactionInfo(
     @PrimaryKey(autoGenerate = true)
     val transactionId: Long? = null,
     var customerId: Int,
-    val createdDate: String,
-    var editedDate: String? = null,
-    val confirmedDate: String? = null,
+    val createdDate: Long,
+    var editedDate: Long? = null,
+    val confirmedDate: Long? = null,
     val isConfirmed: Boolean = false,
     val total: Double
 )

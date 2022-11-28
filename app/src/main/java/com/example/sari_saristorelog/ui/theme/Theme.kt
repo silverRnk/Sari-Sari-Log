@@ -16,7 +16,6 @@ private val LightColorPalette = lightColors(
     primary = Purple500,
     primaryVariant = Purple700,
     secondary = Teal200
-
     /* Other default colors to override
     background = Color.White,
     surface = Color.White,
@@ -27,20 +26,22 @@ private val LightColorPalette = lightColors(
     */
 )
 
+private val myColorPalette = lightColors(
+    primary = Purple500,
+    primaryVariant = Purple700,
+    secondary = Teal200,
+    background = Surface1,
+    surface = Surface1
+)
+
 @Composable
 fun SariSariStoreLogTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
 
     MaterialTheme(
-        colors = colors,
-        typography = Typography,
+        colors = myColorPalette,
+        typography = appTypography,
         shapes = Shapes,
         content = content
     )

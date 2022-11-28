@@ -4,6 +4,7 @@ import com.example.sari_saristorelog.data.Customer
 import com.example.sari_saristorelog.data.transaction.Items
 import com.example.sari_saristorelog.data.transaction.Transaction
 import com.example.sari_saristorelog.data.transaction.TransactionInfo
+import com.example.sari_saristorelog.data.transaction.TransactionInfoAndCustomer
 
 object Transactions {
 
@@ -16,7 +17,7 @@ object Transactions {
         avatar = ""
     )
 
-    var transactioninfo1 = TransactionInfo(transactionId = 1, customerId = 1, createdDate = "July", total = 8.00)
+    var transactioninfo1 = TransactionInfo(transactionId = 1, customerId = 1, createdDate = 1, total = 8.00)
     val item1 = Items(
             itemId = 1,
             transactionId = 1,
@@ -34,4 +35,20 @@ object Transactions {
             subtotal = 6.00,)
 
     val transaction1 = Transaction(transactionInfo = transactioninfo1, items = listOf(item1,item2))
+
+    val customer2 = Customer(
+        customerId = 2,
+        nickName = "Patrick2",
+        firstName = "Patrick2",
+        middleName = "Diego2",
+        lastName = "Bautista2",
+        avatar = ""
+    )
+
+    val transaction2 = TransactionInfo(transactionId = 2, customerId = 2, createdDate = 2, total = 8.00)
+    val transaction3 = TransactionInfo(transactionId = 3, customerId = 2, createdDate = 3, total = 8.00)
+
+    val transWithCustomer1 = listOf(
+        TransactionInfoAndCustomer(transactionId=3, nickName="Patrick2", avatar="", createdDate=3, confirmedDate=null, editedDate=null, isConfirmed=false, total=8.0), TransactionInfoAndCustomer(transactionId=2, nickName="Patrick2", avatar="", createdDate=2, confirmedDate=null, editedDate=null, isConfirmed=false, total=8.0), TransactionInfoAndCustomer(transactionId=1, nickName="Patrick", avatar="", createdDate=1, confirmedDate=null, editedDate=null, isConfirmed=false, total=8.0)
+    )
 }
