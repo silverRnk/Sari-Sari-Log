@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey
 data class TransactionInfo(
     @PrimaryKey(autoGenerate = true)
     val transactionId: Long? = null,
-    var customerId: Int,
+    val customerName: String,
+    val customerIcon: Int,
     val createdDate: Long,
     var editedDate: Long? = null,
     val confirmedDate: Long? = null,

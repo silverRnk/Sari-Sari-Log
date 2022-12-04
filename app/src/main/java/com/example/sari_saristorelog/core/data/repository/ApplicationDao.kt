@@ -1,7 +1,7 @@
 package com.example.sari_saristorelog.core.data.repository
 
 import androidx.room.*
-import com.example.sari_saristorelog.feature_transaction_log.domain.model.Customer
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.deprecated.Customer
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
