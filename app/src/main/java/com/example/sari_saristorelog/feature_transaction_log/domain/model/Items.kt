@@ -11,5 +11,6 @@ data class Items(
     var description: String,
     var quantity: Int,
     var price: Double,
-    var subtotal: Double
+    var subtotal: Double,
+    var isPaid: Boolean = false
 )

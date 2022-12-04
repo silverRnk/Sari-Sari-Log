@@ -5,8 +5,8 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Custom
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
-import com.example.sari_saristorelog.data.transaction.TransactionInfoAndCustomer
-import com.example.sari_saristorelog.util.QueryKeys
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfoAndCustomer
+import com.example.sari_saristorelog.core.data.util.QueryKeys
 
 
 @Dao

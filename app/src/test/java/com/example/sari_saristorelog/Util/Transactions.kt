@@ -8,7 +8,8 @@ object Transactions {
 
     val transaction1 = Transaction(
         transactionInfo = TransactionInfo(customerId = 1, createdDate = "July", total = 8.00),
-        items = listOf(Items(
+        items = listOf(
+            Items(
             description = "items1",
             quantity = 1,
             price = 2.00,
@@ -19,6 +20,7 @@ object Transactions {
                 quantity = 2,
                 price = 3.00,
                 subtotal = 6.00,
-            ))
+            )
+        )
     )
 }

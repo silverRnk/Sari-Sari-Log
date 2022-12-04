@@ -11,5 +11,5 @@ data class Customer(
     var firstName: String?,
     var middleName: String?,
     var lastName: String?,
-    var avatar: Int
+    var avatar: String
 )

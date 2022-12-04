@@ -4,9 +4,9 @@ import com.example.sari_saristorelog.core.data.repository.ApplicationDao
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
-import com.example.sari_saristorelog.data.transaction.TransactionInfoAndCustomer
-import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfoAndCustomer
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
+import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
 import javax.inject.Inject
 
 class LoggerRepositoryImp @Inject constructor(
