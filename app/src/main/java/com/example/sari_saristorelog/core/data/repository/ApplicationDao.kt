@@ -1,13 +1,12 @@
-package com.example.sari_saristorelog.data.repository
+package com.example.sari_saristorelog.core.data.repository
 
 import androidx.room.*
-import com.example.sari_saristorelog.data.Customer
-import com.example.sari_saristorelog.data.transaction.Items
-import com.example.sari_saristorelog.data.transaction.Transaction
-import com.example.sari_saristorelog.data.transaction.TransactionInfo
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Customer
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
 import com.example.sari_saristorelog.data.transaction.TransactionInfoAndCustomer
 import com.example.sari_saristorelog.util.QueryKeys
-import com.example.sari_saristorelog.util.QueryOrder
 
 
 @Dao

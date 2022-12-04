@@ -1,11 +1,12 @@
-package com.example.sari_saristorelog.repository
+package com.example.sari_saristorelog.feature_transaction_log.data.repository
 
-import com.example.sari_saristorelog.data.repository.ApplicationDao
-import com.example.sari_saristorelog.data.transaction.Items
-import com.example.sari_saristorelog.data.transaction.Transaction
-import com.example.sari_saristorelog.data.transaction.TransactionInfo
+import com.example.sari_saristorelog.core.data.repository.ApplicationDao
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
 import com.example.sari_saristorelog.data.transaction.TransactionInfoAndCustomer
-import com.example.sari_saristorelog.util.QueryOrder
+import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
+import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
 import javax.inject.Inject
 
 class LoggerRepositoryImp @Inject constructor(

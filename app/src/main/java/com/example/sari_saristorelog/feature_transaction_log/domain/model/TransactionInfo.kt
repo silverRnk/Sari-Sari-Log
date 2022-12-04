@@ -1,4 +1,4 @@
-package com.example.sari_saristorelog.data.transaction
+package com.example.sari_saristorelog.feature_transaction_log.domain.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

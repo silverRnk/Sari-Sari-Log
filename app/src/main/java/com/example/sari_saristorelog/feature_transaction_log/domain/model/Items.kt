@@ -1,4 +1,4 @@
-package com.example.sari_saristorelog.data.transaction
+package com.example.sari_saristorelog.feature_transaction_log.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,6 +11,5 @@ data class Items(
     var description: String,
     var quantity: Int,
     var price: Double,
-    var subtotal: Double,
-    var isPaid: Boolean = false
+    var subtotal: Double
 )

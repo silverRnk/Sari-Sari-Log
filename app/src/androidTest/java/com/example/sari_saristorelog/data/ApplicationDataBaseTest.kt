@@ -7,11 +7,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.sari_saristorelog.Util.Transactions
-import com.example.sari_saristorelog.data.repository.ApplicationDao
-import com.example.sari_saristorelog.data.repository.ApplicationDataBase
-import com.example.sari_saristorelog.data.transaction.Transaction
-import com.example.sari_saristorelog.data.transaction.TransactionInfo
-import com.example.sari_saristorelog.data.transaction.TransactionInfoAndCustomer
+import com.example.sari_saristorelog.core.data.repository.ApplicationDao
+import com.example.sari_saristorelog.core.data.repository.ApplicationDataBase
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -102,8 +101,10 @@ class ApplicationDataBaseTest {
 
         val transaction = dao.getTransaction(Transactions.transactioninfo1.transactionId)
 
-        assertThat(transaction).isEqualTo(Transaction(transactionInfo = Transactions.transactioninfo1,
-        items = listOf()))
+        assertThat(transaction).isEqualTo(
+            Transaction(transactionInfo = Transactions.transactioninfo1,
+        items = listOf())
+        )
     }
 
     @Test
