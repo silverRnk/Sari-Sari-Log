@@ -2,6 +2,8 @@ package com.example.sari_saristorelog.data
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.asLiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -50,12 +52,12 @@ class ApplicationDataBaseTest {
     @Test
     fun insertTransactionInfo() = runTest(UnconfinedTestDispatcher()) {
 
-        val noId = TransactionInfo(customerId = 1, createdDate = 1, total = 8.00)
+        val noId = TransactionInfo(customerName = "Pat", customerIcon = 1, createdDate = 1, total = 8.00)
 
         val id = dao.insertTransactionInfo(noId)
 
         val transaction1 = dao.getTransactionInfoList()
-        val withId = TransactionInfo(transactionId = id, customerId = 1, createdDate = 1, total = 8.00)
+        val withId = TransactionInfo(transactionId = id, customerName = "Pat", customerIcon = 1, createdDate = 1, total = 8.00)
 
         assertThat(transaction1).contains(withId)
     }
@@ -71,15 +73,6 @@ class ApplicationDataBaseTest {
         assertThat(transaction).isEqualTo(Transactions.transaction1)
     }
 
-    @Test
-    fun insertCustomer() = runTest {
-
-        dao.insertCustomer(Transactions.customerInfo)
-
-        val customer = dao.getCustomer(Transactions.customerInfo.customerId?: 0)
-
-        assertThat(customer).isEqualTo(Transactions.customerInfo)
-    }
 
     @Test
     fun deleteTransactionInfo() = runTest {
@@ -108,103 +101,15 @@ class ApplicationDataBaseTest {
     }
 
     @Test
-    fun deleteCustomer() = runTest {
-
-        dao.insertCustomer(Transactions.customerInfo)
-        dao.deleteCustomer(Transactions.customerInfo)
-
-        val customer = dao.getCustomer(Transactions.customerInfo.customerId?: 0)
-
-        assertThat(customer).isNull()
-    }
-
-
-    @Test
-    fun getTransactionWithCustomerDesc() = runTest {
+    fun getTransactionInfo() = runTest {
         dao.insertTransactionInfo(Transactions.transactioninfo1)
-        dao.insertCustomer(Transactions.customerInfo)
-
-        dao.insertCustomer(Transactions.customer2)
         dao.insertTransactionInfo(Transactions.transaction2)
         dao.insertTransactionInfo(Transactions.transaction3)
 
-        val data = dao.getTransWithCustomerDesc()
+        val transactionList = dao.getTransactionInfoList()
 
-        assertThat(data).isEqualTo(Transactions.transWithCustomer1)
-    }
+        assertThat(transactionList).isNotEmpty()
 
-    @Test
-    fun getTransactionWithCustomerAsc() = runTest {
-        dao.insertTransactionInfo(Transactions.transactioninfo1)
-        dao.insertCustomer(Transactions.customerInfo)
-
-        dao.insertCustomer(Transactions.customer2)
-        dao.insertTransactionInfo(Transactions.transaction2)
-        dao.insertTransactionInfo(Transactions.transaction3)
-
-        val data = dao.getTransWithCustomerAsc()
-
-        assertThat(data).isEqualTo(Transactions.transWithCustomer1.reversed())
-    }
-
-    @Test
-    fun getTransactionWithCustomerBetween2AboveDesc() = runTest {
-        dao.insertTransactionInfo(Transactions.transactioninfo1)
-        dao.insertCustomer(Transactions.customerInfo)
-
-        dao.insertCustomer(Transactions.customer2)
-        dao.insertTransactionInfo(Transactions.transaction2)
-        dao.insertTransactionInfo(Transactions.transaction3)
-
-        val data = dao.getTransWithCustomerBtwDateDesc(toDate = 2)
-
-        assertThat(data).isEqualTo(Transactions.transWithCustomer1.filter { item ->
-            item.createdDate <= 2 })
-    }
-
-    @Test
-    fun getTransactionWithCustomerBetween2AboveAsc() = runTest {
-        dao.insertTransactionInfo(Transactions.transactioninfo1)
-        dao.insertCustomer(Transactions.customerInfo)
-
-        dao.insertCustomer(Transactions.customer2)
-        dao.insertTransactionInfo(Transactions.transaction2)
-        dao.insertTransactionInfo(Transactions.transaction3)
-
-        val data = dao.getTransWithCustomerBtwDateAsc(toDate = 2)
-
-        assertThat(data).isEqualTo(Transactions.transWithCustomer1.filter { item ->
-            item.createdDate <= 2 }.reversed())
-    }
-
-    @Test
-    fun getTransactionWithCustomerBetween2AND3() = runTest {
-        dao.insertTransactionInfo(Transactions.transactioninfo1)
-        dao.insertCustomer(Transactions.customerInfo)
-
-        dao.insertCustomer(Transactions.customer2)
-        dao.insertTransactionInfo(Transactions.transaction2)
-        dao.insertTransactionInfo(Transactions.transaction3)
-
-        val data = dao.getTransWithCustomerBtwDateDesc(fromDate = 2, toDate = 3)
-
-        assertThat(data).isEqualTo(Transactions.transWithCustomer1.filter { item ->
-            (item.createdDate >= 2) && (item.createdDate <= 3)})
-    }
-
-    @Test
-    fun getTransactionWithCustomerBetween2AND3Asc() = runTest {
-        dao.insertTransactionInfo(Transactions.transactioninfo1)
-        dao.insertCustomer(Transactions.customerInfo)
-
-        dao.insertCustomer(Transactions.customer2)
-        dao.insertTransactionInfo(Transactions.transaction2)
-        dao.insertTransactionInfo(Transactions.transaction3)
-
-        val data = dao.getTransWithCustomerBtwDateAsc(fromDate = 2, toDate = 3)
-
-        assertThat(data).isEqualTo(Transactions.transWithCustomer1.filter { item ->
-            (item.createdDate >= 2) && (item.createdDate <= 3)}.reversed())
     }
 
 }

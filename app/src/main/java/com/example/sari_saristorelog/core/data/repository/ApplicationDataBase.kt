@@ -7,8 +7,7 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
 
 @Database(entities = [TransactionInfo::class,
-                     Items::class,
-                     Customer::class],
+                     Items::class],
     version = 3
 )
 abstract class ApplicationDataBase: RoomDatabase() {

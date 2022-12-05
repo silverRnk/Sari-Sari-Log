@@ -5,6 +5,7 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transa
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfoAndCustomer
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
+import kotlinx.coroutines.flow.Flow
 
 interface LoggerRepository {
 
@@ -12,7 +13,7 @@ interface LoggerRepository {
 
     suspend fun getTransaction(id: Long): Transaction?
 
-    suspend fun getTransInfoWithCustomer(order: QueryOrder): List<TransactionInfoAndCustomer>
+    suspend fun getTransInfo(order: QueryOrder): Flow<List<TransactionInfo>>
 
     suspend fun findTransInfoWithCustomerByName(name: String, list: List<TransactionInfoAndCustomer>): List<TransactionInfoAndCustomer>
 

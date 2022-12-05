@@ -7,7 +7,10 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transa
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfoAndCustomer
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
 import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+
 
 class LoggerRepositoryImp @Inject constructor(
     private val dao: ApplicationDao
@@ -23,19 +26,14 @@ class LoggerRepositoryImp @Inject constructor(
     override suspend fun getTransaction(id: Long): Transaction? {
         return dao.getTransaction(id) }
 
-    override suspend fun getTransInfoWithCustomer(order: QueryOrder): List<TransactionInfoAndCustomer> {
+
+    override suspend fun getTransInfo(order: QueryOrder): Flow<List<TransactionInfo>> {
         return when(order){
             is QueryOrder.Asc -> {
-                dao.getTransWithCustomerAsc()
+                dao.getTransactionInfo().map {list -> list.sortedBy { it.createdDate } }
             }
             is QueryOrder.Desc -> {
-                dao.getTransWithCustomerDesc()
-            }
-            is QueryOrder.FromToDateAsc -> {
-                dao.getTransWithCustomerBtwDateAsc(order.fromDate, order.toDate)
-            }
-            is QueryOrder.FromToDateDesc -> {
-                dao.getTransWithCustomerBtwDateDesc(order.fromDate, order.toDate)
+                dao.getTransactionInfo().map {list -> list.sortedByDescending { it.createdDate } }
             }
         }
     }

@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.example.sari_saristorelog.core.data.repository.ApplicationDao
 import com.example.sari_saristorelog.core.data.repository.ApplicationDataBase
-import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
 import com.example.sari_saristorelog.feature_transaction_log.data.repository.LoggerRepositoryImp
+import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,6 +34,6 @@ class AppModule {
     @Provides
     @Singleton
     fun provideLoggerRepository(dao: ApplicationDao): LoggerRepository {
-        return LoggerRepositoryImp(dao) as LoggerRepository
+        return LoggerRepositoryImp(dao)
     }
 }
