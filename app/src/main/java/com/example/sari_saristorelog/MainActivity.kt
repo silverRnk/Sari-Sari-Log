@@ -10,6 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.HomeScreen
 import com.example.sari_saristorelog.ui.theme.SariSariStoreLogTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +28,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+
+                    NavHost(navController = navController, startDestination = "Home"){
+                        composable("Home"){
+                            HomeScreen()
+                        }
+                    }
 
                 }
             }

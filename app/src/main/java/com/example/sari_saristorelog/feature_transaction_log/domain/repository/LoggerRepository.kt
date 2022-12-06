@@ -13,8 +13,7 @@ interface LoggerRepository {
 
     suspend fun getTransaction(id: Long): Transaction?
 
-    suspend fun getTransInfo(order: QueryOrder): Flow<List<TransactionInfo>>
+    fun getTransInfo(): Flow<List<TransactionInfo>>
 
-    suspend fun findTransInfoWithCustomerByName(name: String, list: List<TransactionInfoAndCustomer>): List<TransactionInfoAndCustomer>
 
 }

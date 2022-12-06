@@ -1,5 +1,6 @@
 package com.example.sari_saristorelog.Util
 
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.deprecated.Customer
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transaction
@@ -7,6 +8,9 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transa
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfoAndCustomer
 
 object Transactions {
+
+    private val testContext = getInstrumentation().context
+    private val testRes = testContext.resources
 
     val customerInfo = Customer(
         customerId = 1,

@@ -26,19 +26,8 @@ class LoggerRepositoryImp @Inject constructor(
     override suspend fun getTransaction(id: Long): Transaction? {
         return dao.getTransaction(id) }
 
-
-    override suspend fun getTransInfo(order: QueryOrder): Flow<List<TransactionInfo>> {
-        return when(order){
-            is QueryOrder.Asc -> {
-                dao.getTransactionInfo().map {list -> list.sortedBy { it.createdDate } }
-            }
-            is QueryOrder.Desc -> {
-                dao.getTransactionInfo().map {list -> list.sortedByDescending { it.createdDate } }
-            }
-        }
+    override fun getTransInfo(): Flow<List<TransactionInfo>> {
+        return dao.getTransactionInfo()
     }
 
-    override suspend fun findTransInfoWithCustomerByName(name: String, list: List<TransactionInfoAndCustomer>): List<TransactionInfoAndCustomer> {
-        return list.filter { it.nickName == name }
-    }
 }
