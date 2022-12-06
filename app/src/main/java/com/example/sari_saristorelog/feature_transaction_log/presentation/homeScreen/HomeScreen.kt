@@ -22,14 +22,17 @@ import com.example.sari_saristorelog.feature_transaction_log.presentation.homeSc
 fun HomeScreen(
     viewModel: HomeScreenVM = hiltViewModel()
 ){
+    val listState = viewModel.transactionInfoList.value
+    val textFieldState = viewModel.searchBoxState.value
+    val dateFilterState = viewModel.onDateFilterState
 
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
 
         Spacer(modifier = Modifier.height(10.dp))
 
         Box(modifier = Modifier.fillMaxWidth()){
-            TextField(value = viewModel.searchText,
-                onValueChange = {},
+            TextField(value = textFieldState.text,
+                onValueChange = {viewModel.onEvent(HomeScreenEvent.OnSearchValueChange(it))},
                 placeholder = { Text(text = "Search for Name")},
             modifier = Modifier.align(Alignment.Center))
 
@@ -50,7 +53,7 @@ fun HomeScreen(
             .fillMaxWidth()
             .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally){
-            items(viewModel.transactionList){ item ->
+            items(listState){ item ->
                 TransactionItem(transactionInfo = item, onClick = { /*TODO*/ },
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
