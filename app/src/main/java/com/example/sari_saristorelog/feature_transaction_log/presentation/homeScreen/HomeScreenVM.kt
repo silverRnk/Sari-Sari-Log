@@ -13,6 +13,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.time.*
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +22,6 @@ class HomeScreenVM @Inject constructor(
    private val useCases: TransactionLogUseCases
 ): ViewModel()
 {
-
 
     private val _transactionInfoList = mutableStateOf(listOf<TransactionInfo>())
     val transactionInfoList: State<List<TransactionInfo>> = _transactionInfoList
@@ -68,7 +69,22 @@ class HomeScreenVM @Inject constructor(
 
             }
             is HomeScreenEvent.OnSelectItem -> {
-
+                //@Todo Implement HomeScreenEvent OnSelectItem
+            }
+            is HomeScreenEvent.OnFromFilterDateSelected -> {
+                _onDateFilterState.value = onDateFilterState.value.copy(
+                    fromDate = convertLocalDateToLongDate(event.date)
+                )
+            }
+            is HomeScreenEvent.OnToFilterDateSelected -> {
+                _onDateFilterState.value = onDateFilterState.value.copy(
+                    toDate = convertLocalDateToLongDate(event.date)
+                )
+            }
+            is HomeScreenEvent.OnFilterVisibilityToggle -> {
+                _onDateFilterState.value = onDateFilterState.value.copy(
+                    isEnable = !onDateFilterState.value.isEnable
+                )
             }
         }
 
@@ -104,4 +120,16 @@ class HomeScreenVM @Inject constructor(
         }
     }
 
+    fun convertLongDateToLocalDate(date: Long): LocalDate{
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(date), ZoneId.of("UTC")).toLocalDate()
+    }
+
+    private fun  convertLocalDateToLongDate(date: LocalDate): Long{
+        //@Todo Move to UseCases
+        return ZonedDateTime.of(
+            date, LocalTime.MIDNIGHT, ZoneId.of("UTC")
+        ).toEpochSecond()
+    }
+
 }
+
