@@ -1,4 +1,4 @@
-package com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen
+package com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.state
 
 data class TextFieldState(
     val text: String = "",

@@ -9,11 +9,13 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transa
 import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.TransactionLogUseCases
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.FilterBy
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
+import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.state.DateFilterState
+import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.state.TextFieldState
+import com.example.sari_saristorelog.feature_transaction_log.presentation.util.DateConverter.convertLocalDateToLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.time.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +36,9 @@ class HomeScreenVM @Inject constructor(
     private val _orderSeqeunce = mutableStateOf(QueryOrder.Desc)
     val orderSequence: State<QueryOrder> = _orderSeqeunce
 
-    private val filterState = mutableStateOf<FilterBy>(FilterBy.NoFilter(_orderSeqeunce.value))
+    private val filterState = mutableStateOf<FilterBy>(
+        FilterBy.Date(onDateFilterState.value.fromDate, onDateFilterState.value.toDate,
+        orderSequence.value))
 
     private var getJob: Job? = null
 
@@ -81,11 +85,15 @@ class HomeScreenVM @Inject constructor(
                 _onDateFilterState.value = onDateFilterState.value.copy(
                     toDate = convertLocalDateToLocalDateTime(event.date)
                 )
+                updateFilterState()
+                getTransactionInfo(filterState.value)
             }
             is HomeScreenEvent.OnFilterVisibilityToggle -> {
                 _onDateFilterState.value = onDateFilterState.value.copy(
                     isEnable = !onDateFilterState.value.isEnable
                 )
+                updateFilterState()
+                getTransactionInfo(filterState.value)
             }
         }
 
@@ -101,34 +109,21 @@ class HomeScreenVM @Inject constructor(
     }
 
     private fun updateFilterState(){
-        if(_searchBoxState.value.isEnable && !_onDateFilterState.value.isEnable){
-            filterState.value = FilterBy.Name(_searchBoxState.value.text, _orderSeqeunce.value)
-        }else if(!_searchBoxState.value.isEnable && _onDateFilterState.value.isEnable){
+        if (!searchBoxState.value.isEnable){
             filterState.value = FilterBy.Date(
-                fromDate = _onDateFilterState.value.fromDate,
-                toDate = _onDateFilterState.value.toDate,
-                queryOrder = _orderSeqeunce.value
-            )
-        }else if (_searchBoxState.value.isEnable && _onDateFilterState.value.isEnable){
-            filterState.value = FilterBy.DateAndName(
-                name = _searchBoxState.value.text,
-                fromDate = _onDateFilterState.value.fromDate,
-                toDate = _onDateFilterState.value.toDate,
-                queryOrder = _orderSeqeunce.value
-            )
+                fromDate = onDateFilterState.value.fromDate,
+                toDate = onDateFilterState.value.fromDate,
+                queryOrder = orderSequence.value)
         }else{
-            filterState.value = FilterBy.NoFilter(_orderSeqeunce.value)
+            filterState.value = FilterBy.DateAndName(
+                name = searchBoxState.value.text,
+                fromDate = onDateFilterState.value.fromDate,
+                toDate = onDateFilterState.value.fromDate,
+                queryOrder = orderSequence.value)
         }
     }
 
-    fun convertLocalDateTimeToLocalDate(date: LocalDateTime): LocalDate{
-        return date.toLocalDate()
-    }
 
-    private fun  convertLocalDateToLocalDateTime(date: LocalDate): LocalDateTime{
-        //@Todo Move to UseCases
-        return LocalDateTime.of(date, LocalTime.of(23,59))
-    }
 
 }
 

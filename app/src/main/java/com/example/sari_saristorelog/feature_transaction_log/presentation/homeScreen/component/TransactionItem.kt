@@ -43,7 +43,6 @@ fun TransactionItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.width(10.dp))
 
-                //@Todo Add Custom Icon
                 Icon(painter = painterResource(id = com.example.sari_saristorelog.R.drawable.ic_baseline_face_24)
                     , contentDescription = "customerIcon",
                     modifier = Modifier

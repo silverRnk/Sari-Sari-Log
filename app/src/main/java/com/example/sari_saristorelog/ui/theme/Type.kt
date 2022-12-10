@@ -41,7 +41,12 @@ val appTypography = androidx.compose.material.Typography(
     h3 = TextStyle(
         fontFamily = Inter.regular,
         fontSize = 20.sp
-    )
+    ),
+
+    body1 = TextStyle(
+        fontFamily = Inter.medium,
+        fontSize = 20.sp),
+
 
 
 )
