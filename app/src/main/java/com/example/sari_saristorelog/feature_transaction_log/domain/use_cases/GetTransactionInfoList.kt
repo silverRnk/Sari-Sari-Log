@@ -6,6 +6,7 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.util.FilterB
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
 
 class GetTransactionInfoList(
     private val repository: LoggerRepository
@@ -21,7 +22,7 @@ class GetTransactionInfoList(
                     is FilterBy.Date -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
-                                item.createdDate >= filterBy.fromDate && item.createdDate == filterBy.toDate
+                                item.createdDate!! >= filterBy.fromDate && item.createdDate <= filterBy.toDate
                             }.sortedByDescending { item -> item.createdDate } }
                     }
                     is FilterBy.Name -> {
@@ -34,8 +35,8 @@ class GetTransactionInfoList(
                     is FilterBy.DateAndName -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
-                                item.createdDate >= filterBy.fromDate &&
-                                        item.createdDate == filterBy.toDate &&
+                                item.createdDate!! >= filterBy.fromDate &&
+                                        item.createdDate!! <= filterBy.toDate &&
                                         item.customerName.lowercase() == filterBy.name.lowercase()
                             }.sortedByDescending { item -> item.createdDate }
                         }
@@ -50,7 +51,7 @@ class GetTransactionInfoList(
                     is FilterBy.Date -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
-                                item.createdDate >= filterBy.fromDate && item.createdDate == filterBy.toDate
+                                item.createdDate!! >= filterBy.fromDate && item.createdDate!! <= filterBy.toDate
                             }.sortedBy { item -> item.createdDate } }
                     }
                     is FilterBy.Name -> {
@@ -63,8 +64,8 @@ class GetTransactionInfoList(
                     is FilterBy.DateAndName -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
-                                item.createdDate >= filterBy.fromDate &&
-                                        item.createdDate == filterBy.toDate &&
+                                item.createdDate!! >= filterBy.fromDate &&
+                                        item.createdDate <= filterBy.toDate &&
                                         item.customerName.lowercase() == filterBy.name.lowercase()
                             }.sortedBy { item -> item.createdDate }
                         }

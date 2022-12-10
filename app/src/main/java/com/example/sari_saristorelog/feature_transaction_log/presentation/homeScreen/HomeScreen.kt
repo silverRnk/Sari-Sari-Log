@@ -32,9 +32,9 @@ fun HomeScreen(
 
     //@Todo move the local date to viewmodel
     val fromLocalDate = viewModel
-        .convertLongDateToLocalDate(dateFilterState.fromDate)
+        .convertLocalDateTimeToLocalDate(dateFilterState.fromDate)
     val toLocalDate = viewModel
-        .convertLongDateToLocalDate(dateFilterState.toDate)
+        .convertLocalDateTimeToLocalDate(dateFilterState.toDate)
 
 
 

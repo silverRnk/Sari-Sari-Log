@@ -14,7 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.time.*
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +47,9 @@ class HomeScreenVM @Inject constructor(
         when(event){
             is HomeScreenEvent.OnDateFilter -> {
                 _onDateFilterState.value = onDateFilterState.value.copy(
-                    fromDate = event.fromDate, toDate = event.toDate, isEnable = event.isEnable)
+                    fromDate = convertLocalDateToLocalDateTime(event.fromDate),
+                    toDate = convertLocalDateToLocalDateTime(event.toDate),
+                    isEnable = event.isEnable)
                 updateFilterState()
                 getTransactionInfo(filterState.value)
             }
@@ -73,12 +74,12 @@ class HomeScreenVM @Inject constructor(
             }
             is HomeScreenEvent.OnFromFilterDateSelected -> {
                 _onDateFilterState.value = onDateFilterState.value.copy(
-                    fromDate = convertLocalDateToLongDate(event.date)
+                    fromDate = convertLocalDateToLocalDateTime(event.date)
                 )
             }
             is HomeScreenEvent.OnToFilterDateSelected -> {
                 _onDateFilterState.value = onDateFilterState.value.copy(
-                    toDate = convertLocalDateToLongDate(event.date)
+                    toDate = convertLocalDateToLocalDateTime(event.date)
                 )
             }
             is HomeScreenEvent.OnFilterVisibilityToggle -> {
@@ -120,15 +121,13 @@ class HomeScreenVM @Inject constructor(
         }
     }
 
-    fun convertLongDateToLocalDate(date: Long): LocalDate{
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(date), ZoneId.of("UTC")).toLocalDate()
+    fun convertLocalDateTimeToLocalDate(date: LocalDateTime): LocalDate{
+        return date.toLocalDate()
     }
 
-    private fun  convertLocalDateToLongDate(date: LocalDate): Long{
+    private fun  convertLocalDateToLocalDateTime(date: LocalDate): LocalDateTime{
         //@Todo Move to UseCases
-        return ZonedDateTime.of(
-            date, LocalTime.MIDNIGHT, ZoneId.of("UTC")
-        ).toEpochSecond()
+        return LocalDateTime.of(date, LocalTime.of(23,59))
     }
 
 }
