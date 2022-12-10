@@ -1,10 +1,7 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -21,14 +18,13 @@ fun NameTextField(
     Box(
         modifier = Modifier
             .wrapContentHeight()
-            .width(150.dp)
+            .fillMaxWidth(0.7f)
             .background(Color.White)) {
 
         BasicTextField(
             value = text,
             onValueChange = {onValueChange(it)},
             textStyle = MaterialTheme.typography.body1,
-            singleLine = true,
             maxLines = 1,
             modifier = Modifier
                 .align(Alignment.CenterStart)

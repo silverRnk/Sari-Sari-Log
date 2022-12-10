@@ -29,16 +29,22 @@ class AddEditTransactionViewModel @Inject constructor(
                     name = event.name)
             }
             is AddEditTransactionEvent.OnToggleIconSelection -> {
+                //@Todo Test Event for releiblity
                 val nextIcon = CustomerIcons.icons.indexOf(customerInfoState.value.customerIcon) + 1
                 val iconsCount = CustomerIcons.icons.size
                 _customerInfoState.value = customerInfoState.value.copy(
                     customerIcon = CustomerIcons.icons.elementAt(
-                        if(nextIcon > iconsCount) 0 else nextIcon
+                        if(nextIcon > iconsCount) 1 else nextIcon
                     )
                 )
             }
-            is AddEditTransactionEvent.OnAddItem -> {
+            is AddEditTransactionEvent.OnAddEditItem -> {
                 //@Todo Implement AddEditTransaction OnAddItem
+                if(event.itemIndex == -1){
+
+                }else{
+
+                }
             }
             is AddEditTransactionEvent.OnDeleteItem -> {
                 if (event.itemIndex <= itemState.value.items.size){
@@ -47,6 +53,9 @@ class AddEditTransactionViewModel @Inject constructor(
                         index != event.itemIndex
                     })
                 }
+            }
+            is AddEditTransactionEvent.OnAddTransaction -> {
+
             }
         }
     }

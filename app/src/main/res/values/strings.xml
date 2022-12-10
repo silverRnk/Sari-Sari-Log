@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Sari-Sari Store Log</string>
+    <string name="nav_item_1">Home</string>
+    <string name="nav_item_2">Add</string>
 </resources>

@@ -1,15 +1,20 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,17 +35,21 @@ fun CustomerInfoFill(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Spacer(modifier = Modifier.width(10.dp))
         
-        IconButton(onClick = {onToggleIconSelection}) {
+        Box(modifier = Modifier
+            .wrapContentSize()
+            .clip(CircleShape)
+            .clickable { onToggleIconSelection() }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_left_15),
-                contentDescription = "ToggleIcon")
+                contentDescription = "ToggleIcon",
+                modifier = Modifier.size(25.dp))
         }
 
         Icon(
             painter = painterResource(id = customerIcon),
-            contentDescription = "CustomerIcon")
+            contentDescription = "CustomerIcon",
+            modifier = Modifier.size(60.dp))
 
         Spacer(modifier = Modifier.width(15.dp))
 
@@ -49,11 +58,11 @@ fun CustomerInfoFill(
                 style = MaterialTheme.typography.h3,
                 fontSize = 15.sp )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(2.dp))
 
             NameTextField(
                 text = customerName,
-                onValueChange = {onNameChange})
+                onValueChange = {onNameChange(it)})
         }
 
     }
