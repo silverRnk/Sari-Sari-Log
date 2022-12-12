@@ -8,4 +8,5 @@ object Inter{
     val light = FontFamily(Font(R.font.inter_light))
     val regular = FontFamily(Font(R.font.inter_regular))
     val medium = FontFamily(Font(R.font.inter_medium))
+    val bold = FontFamily(Font(R.font.inter_bold))
 }

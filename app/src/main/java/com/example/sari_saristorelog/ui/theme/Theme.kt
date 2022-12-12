@@ -28,7 +28,7 @@ private val LightColorPalette = lightColors(
 )
 
 private val myColorPalette = lightColors(
-    primary = Surface1,
+    primary = Purple500,
     primaryVariant = Purple700,
     secondary = Teal200,
     background = Surface1,

@@ -7,6 +7,7 @@ import com.example.sari_saristorelog.core.data.util.CustomerIcons
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.deprecated.Customer
 import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.TransactionLogUseCases
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.CustomerInfoState
+import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.DateState
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.ItemState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,6 +22,9 @@ class AddEditTransactionViewModel @Inject constructor(
 
     private val _itemState = mutableStateOf(ItemState())
     val itemState: State<ItemState> = _itemState
+
+    private val _dateState = mutableStateOf(DateState())
+    val dateState: State<DateState> = _dateState
 
     fun onEvent(event: AddEditTransactionEvent){
         when(event){
@@ -56,6 +60,16 @@ class AddEditTransactionViewModel @Inject constructor(
             }
             is AddEditTransactionEvent.OnAddTransaction -> {
 
+            }
+            is AddEditTransactionEvent.OnChangeDate -> {
+                _dateState.value = dateState.value.copy(
+                    currentDate = event.date
+                )
+            }
+            is AddEditTransactionEvent.OnChangeTime -> {
+                _dateState.value = dateState.value.copy(
+                    currentTime = event.time
+                )
             }
         }
     }

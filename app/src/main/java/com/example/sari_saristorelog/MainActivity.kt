@@ -55,9 +55,11 @@ class MainActivity : ComponentActivity() {
                                     icon = {
                                            Icon(painter = painterResource(id = navItem.icon), contentDescription = "navIcon")
                                     },
+                                    selectedContentColor = Color.Black,
+                                    unselectedContentColor = Color.LightGray,
                                     label = { Text(
                                         text = stringResource(id = navItem.label),
-                                        style = MaterialTheme.typography.h1,
+                                        style = MaterialTheme.typography.h2,
                                         fontSize = 15.sp)},
                                     selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
                                     onClick = {

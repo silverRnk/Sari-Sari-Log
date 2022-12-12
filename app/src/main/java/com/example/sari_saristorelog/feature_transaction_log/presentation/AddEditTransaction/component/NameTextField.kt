@@ -25,10 +25,11 @@ fun NameTextField(
             value = text,
             onValueChange = {onValueChange(it)},
             textStyle = MaterialTheme.typography.body1,
+            singleLine = true,
             maxLines = 1,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 5.dp))
+                .padding(start = 5.dp, top = 5.dp, bottom = 5.dp))
     }
 
 }

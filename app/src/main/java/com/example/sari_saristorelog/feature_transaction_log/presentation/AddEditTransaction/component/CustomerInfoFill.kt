@@ -56,7 +56,7 @@ fun CustomerInfoFill(
         Column(horizontalAlignment = Alignment.Start) {
             Text(text = "Name:",
                 style = MaterialTheme.typography.h3,
-                fontSize = 15.sp )
+                fontSize = 18.sp )
 
             Spacer(modifier = Modifier.height(2.dp))
 
