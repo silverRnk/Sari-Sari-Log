@@ -1,3 +1,5 @@
+﻿@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction
 
 import androidx.compose.foundation.Canvas
@@ -12,16 +14,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.AddItem
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.AddItemDialog
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.CustomerInfoFill
@@ -142,25 +148,35 @@ fun AddEditTransactionScreen(
     }
 
     var quantity by remember {
-        mutableStateOf("")
+        mutableStateOf("0")
     }
 
     var price by remember {
-        mutableStateOf("")
+        mutableStateOf("0")
     }
 
-    var subtotal by remember {
-        mutableStateOf("")
+    var subtotal: State<Float> by remember {
+        mutableStateOf(
+            derivedStateOf {
+            if(price.isDigitsOnly() && quantity.isDigitsOnly()){
+                price.toFloat() * quantity.toInt()
+            }else 0.00f
+        })
     }
 
     MaterialDialog(
         dialogState = addItemDialog,
         backgroundColor = Surface1,
+        shape = RectangleShape,
         buttons = {
             positiveButton(
                 text = "Ok",
                 textStyle = MaterialTheme.typography.h3.copy(fontSize = 15.sp, color = Color.Black),
                 onClick = {
+                    viewModel.onEvent(AddEditTransactionEvent.OnPositiveButton(Items(description = description,
+                        quantity = quantity.toInt(),
+                        price = price.toDouble(),
+                        subtotal = subtotal.value.toDouble())))
                 }
             )
 
@@ -170,18 +186,22 @@ fun AddEditTransactionScreen(
         }
     ) {
 
-        customView {
-            AddItemDialog(
-                description = description,
-                quantity = quantity,
-                price = price,
-                subtotal = subtotal,
-                onDescriptionChange = {},
-                onQuantityChange = {},
-                onPriceChange = {},
-                onSubtotalChange = {}
-            )
-        }
+        //Todo
+        AddItemDialog(
+            description = description,
+            quantity = quantity,
+            price = price,
+            subtotal = subtotal.value.toString(),
+            onDescriptionChange = {description = it},
+            onQuantityChange = {
+                               if(it.isDigitsOnly()){
+                                   quantity = it
+                               }
+            },
+            onPriceChange = {if(it.contains(Regex("\\d*.\\d*"))) price = it},
+            onSubtotalChange = { }
+        )
+
     }
 
 

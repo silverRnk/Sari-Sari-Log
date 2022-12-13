@@ -35,7 +35,7 @@ fun AddItemDialog(
         Column(
             modifier = Modifier.wrapContentSize(),
             horizontalAlignment = Alignment.Start) {
-            Text(text = "Description", style = MaterialTheme.typography.h1, fontSize = 30.sp)
+            Text(text = "Description", style = MaterialTheme.typography.h2, fontSize = 20.sp)
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -43,11 +43,12 @@ fun AddItemDialog(
                 description = description,
                 onValueChange = onDescriptionChange,
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
+                    .fillMaxWidth()
                     .height(200.dp)
+                    .padding(15.dp)
                     .clip(dialogShape)
                     .background(Color.White)
-                    .border(width = 2.dp, color = Color.Black, shape = dialogShape))
+                    .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -66,11 +67,12 @@ fun AddItemDialog(
                     value = quantity,
                     onValueChange = onQuantityChange,
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth()
+                        .padding(10.dp)
                         .height(60.dp)
                         .clip(dialogShape)
                         .background(Color.White)
-                        .border(width = 2.dp, color = Color.Black, shape = dialogShape))
+                        .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
             }
 
             Column(modifier = Modifier
@@ -86,11 +88,12 @@ fun AddItemDialog(
                     value = price,
                     onValueChange = onPriceChange,
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth()
+                        .padding(10.dp)
                         .height(60.dp)
                         .clip(dialogShape)
                         .background(Color.White)
-                        .border(width = 2.dp, color = Color.Black, shape = dialogShape))
+                        .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
             }
 
         }
@@ -99,7 +102,7 @@ fun AddItemDialog(
         Spacer(modifier = Modifier.height(10.dp))
 
         Column(modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.5f)
             .wrapContentHeight()
             .padding(start = 10.dp, end = 10.dp),
              horizontalAlignment = Alignment.Start) {
@@ -112,11 +115,11 @@ fun AddItemDialog(
                 value = subtotal,
                 onValueChange = onSubtotalChange,
                 modifier = Modifier
-                    .fillMaxWidth(0.5f)
+                    .fillMaxWidth()
                     .height(60.dp)
                     .clip(dialogShape)
                     .background(Color.White)
-                    .border(width = 2.dp, color = Color.Black, shape = dialogShape))
+                    .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
         }
 
 

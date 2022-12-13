@@ -71,6 +71,11 @@ class AddEditTransactionViewModel @Inject constructor(
                     currentTime = event.time
                 )
             }
+            is AddEditTransactionEvent.OnPositiveButton -> {
+                _itemState.value = itemState.value.copy(
+                    items = itemState.value.items.plus(event.items)
+                )
+            }
         }
     }
 }
