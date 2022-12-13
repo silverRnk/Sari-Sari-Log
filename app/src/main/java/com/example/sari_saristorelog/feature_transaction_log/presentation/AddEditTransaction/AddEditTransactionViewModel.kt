@@ -51,7 +51,7 @@ class AddEditTransactionViewModel @Inject constructor(
                 }
             }
             is AddEditTransactionEvent.OnDeleteItem -> {
-                if (event.itemIndex <= itemState.value.items.size){
+                if ((event.itemIndex+1) <= itemState.value.items.size){
                     _itemState.value = itemState.value.copy(
                         items = itemState.value.items.filterIndexed { index, _ ->
                         index != event.itemIndex

@@ -171,7 +171,7 @@ fun AddEditTransactionScreen(
         buttons = {
             positiveButton(
                 text = "Ok",
-                textStyle = MaterialTheme.typography.h3.copy(fontSize = 15.sp, color = Color.Black),
+                textStyle = MaterialTheme.typography.h1.copy(fontSize = 15.sp, color = Color.Black),
                 onClick = {
                     viewModel.onEvent(AddEditTransactionEvent.OnPositiveButton(Items(description = description,
                         quantity = quantity.toInt(),
@@ -182,7 +182,7 @@ fun AddEditTransactionScreen(
 
             negativeButton(
                 text = "Cancel",
-                textStyle = MaterialTheme.typography.h3.copy(fontSize = 15.sp,color = Color.Black))
+                textStyle = MaterialTheme.typography.h1.copy(fontSize = 15.sp,color = Color.Black))
         }
     ) {
 

@@ -29,23 +29,41 @@ fun AddItemDialog(
 ){
     val dialogShape = RoundedCornerShape(10.dp)
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.background(backgroundColor).fillMaxWidth().wrapContentHeight()) {
+    Column(horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .background(backgroundColor)
+            .fillMaxWidth()
+            .wrapContentHeight()) {
+        
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(text = "Add Item",
+            style = MaterialTheme.typography.h1,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(start = 15.dp))
+
+        Spacer(modifier = Modifier.height(20.dp))
+
 
         Column(
             modifier = Modifier.wrapContentSize(),
             horizontalAlignment = Alignment.Start) {
-            Text(text = "Description", style = MaterialTheme.typography.h2, fontSize = 20.sp)
+            Text(text = "Description",
+                style = MaterialTheme.typography.h3,
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .wrapContentHeight())
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(1.dp))
 
             DescriptionTextField(
                 description = description,
                 onValueChange = onDescriptionChange,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(15.dp)
+                    .height(150.dp)
+                    .padding(start = 15.dp, end = 15.dp)
                     .clip(dialogShape)
                     .background(Color.White)
                     .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
@@ -59,16 +77,18 @@ fun AddItemDialog(
                 .wrapContentHeight()
                 .padding(start = 5.dp, end = 5.dp)) {
                 Text(
-                    text = "Quantity",
-                    style = MaterialTheme.typography.h2,
-                    fontSize = 20.sp)
+                    text = "Qty",
+                    style = MaterialTheme.typography.h3,
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .padding(start = 15.dp))
 
                 NumberTextField(
                     value = quantity,
                     onValueChange = onQuantityChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(start = 10.dp, end = 10.dp)
                         .height(60.dp)
                         .clip(dialogShape)
                         .background(Color.White)
@@ -81,15 +101,16 @@ fun AddItemDialog(
                 .padding(start = 5.dp, end = 5.dp)) {
                 Text(
                     text = "Price",
-                    style = MaterialTheme.typography.h2,
-                    fontSize = 20.sp)
+                    style = MaterialTheme.typography.h3,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(start = 15.dp))
 
                 NumberTextField(
                     value = price,
                     onValueChange = onPriceChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(start = 10.dp, end = 10.dp)
                         .height(60.dp)
                         .clip(dialogShape)
                         .background(Color.White)
@@ -107,9 +128,10 @@ fun AddItemDialog(
             .padding(start = 10.dp, end = 10.dp),
              horizontalAlignment = Alignment.Start) {
             Text(
-                text = "Total",
-                style = MaterialTheme.typography.h2,
-                fontSize = 20.sp)
+                text = "Subtotal",
+                style = MaterialTheme.typography.h3,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(start = 15.dp))
 
             NumberTextField(
                 value = subtotal,
