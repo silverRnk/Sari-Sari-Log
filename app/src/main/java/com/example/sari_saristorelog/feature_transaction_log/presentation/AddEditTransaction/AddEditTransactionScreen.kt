@@ -350,7 +350,7 @@ fun AddEditTransactionScreen(
                 state = scrollState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f),
+                    .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally){
 
                 items(itemsState.value.items.size){ index ->
