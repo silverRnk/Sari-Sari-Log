@@ -194,11 +194,19 @@ fun AddEditTransactionScreen(
             subtotal = subtotal.value.toString(),
             onDescriptionChange = {description = it},
             onQuantityChange = {
-                               if(it.isDigitsOnly()){
-                                   quantity = it
-                               }
+                quantity = if(it.isDigitsOnly() && !it.isNullOrEmpty()
+                ){ if(it.length > 1) it.trimStart { c: Char -> c == "0".toCharArray()[0] } else it
+                }else  {
+                    "0"
+                }
+
             },
-            onPriceChange = {if(it.contains(Regex("\\d*.\\d*"))) price = it},
+            onPriceChange = {if(it.last().isDigit() || it.last() == ".".toCharArray()[0]){
+                val dotCount = it.count {char -> char == ".".toCharArray()[0] }
+                if(dotCount < 2){
+                    price = it
+                }
+            }},
             onSubtotalChange = { }
         )
 
