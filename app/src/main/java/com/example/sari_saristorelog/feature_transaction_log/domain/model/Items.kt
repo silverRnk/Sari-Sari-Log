@@ -10,7 +10,7 @@ data class Items(
     var transactionId: Long? = null,
     var description: String,
     var quantity: Int,
-    var price: Double,
+    var price: Double?,
     var subtotal: Double,
     var isPaid: Boolean = false
 )

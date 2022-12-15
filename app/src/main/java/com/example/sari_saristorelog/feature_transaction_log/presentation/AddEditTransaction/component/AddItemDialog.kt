@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sari_saristorelog.ui.theme.Surface1
@@ -18,16 +21,17 @@ import com.example.sari_saristorelog.ui.theme.Surface1
 @Composable
 fun AddItemDialog(
     description: String,
-    quantity: String,
-    price: String,
-    subtotal: String,
+    quantity: TextFieldValue,
+    price: TextFieldValue,
+    subtotal: TextFieldValue,
     onDescriptionChange: (String) -> Unit,
-    onQuantityChange: (String) -> Unit,
-    onPriceChange: (String) -> Unit,
-    onSubtotalChange: (String) -> Unit,
+    onQuantityChange: (TextFieldValue) -> Unit,
+    onPriceChange: (TextFieldValue) -> Unit,
+    onSubtotalChange: (TextFieldValue) -> Unit,
     backgroundColor: Color = Surface1,
 ){
     val dialogShape = RoundedCornerShape(10.dp)
+
 
     Column(horizontalAlignment = Alignment.Start,
         modifier = Modifier

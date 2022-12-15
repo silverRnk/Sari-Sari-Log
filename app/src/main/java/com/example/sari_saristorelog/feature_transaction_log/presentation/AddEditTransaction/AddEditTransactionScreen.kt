@@ -20,10 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -35,7 +36,6 @@ import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEdi
 import com.example.sari_saristorelog.feature_transaction_log.presentation.util.PickerColor
 import com.example.sari_saristorelog.ui.theme.Surface1
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.customView
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -50,6 +50,7 @@ fun AddEditTransactionScreen(
     val itemsState = viewModel.itemState
     val customerInfoState = viewModel.customerInfoState
     val dateState = viewModel.dateState
+    val addItemDialogState = viewModel.addItemDialogState
 
     val dateFormatter by remember {
         mutableStateOf(
@@ -147,19 +148,26 @@ fun AddEditTransactionScreen(
         mutableStateOf("")
     }
 
-    var quantity by remember {
-        mutableStateOf("0")
+    var quantityTextFieldValue by remember {
+        mutableStateOf(TextFieldValue(text = "0"))
     }
 
-    var price by remember {
-        mutableStateOf("0")
+    var priceTextFieldValue by remember {
+        mutableStateOf(TextFieldValue(text = "0"))
+    }
+
+    var subtotalTextFieldValue by remember {
+        mutableStateOf(TextFieldValue(text = "0"))
     }
 
     var subtotal: State<Float> by remember {
         mutableStateOf(
             derivedStateOf {
-            if(price.isDigitsOnly() && quantity.isDigitsOnly()){
-                price.toFloat() * quantity.toInt()
+                val price = priceTextFieldValue.text
+                val quality = quantityTextFieldValue.text
+
+            if(price.isDigitsOnly() && price.isDigitsOnly()){
+                price.toFloat() * quality.toInt()
             }else 0.00f
         })
     }
@@ -173,10 +181,7 @@ fun AddEditTransactionScreen(
                 text = "Ok",
                 textStyle = MaterialTheme.typography.h1.copy(fontSize = 15.sp, color = Color.Black),
                 onClick = {
-                    viewModel.onEvent(AddEditTransactionEvent.OnPositiveButton(Items(description = description,
-                        quantity = quantity.toInt(),
-                        price = price.toDouble(),
-                        subtotal = subtotal.value.toDouble())))
+                    viewModel.dialogEvent(AddEditDialogEvent.OnPositiveButton)
                 }
             )
 
@@ -186,28 +191,17 @@ fun AddEditTransactionScreen(
         }
     ) {
 
+
         //Todo
         AddItemDialog(
-            description = description,
-            quantity = quantity,
-            price = price,
-            subtotal = subtotal.value.toString(),
-            onDescriptionChange = {description = it},
-            onQuantityChange = {
-                quantity = if(it.isDigitsOnly() && !it.isNullOrEmpty()
-                ){ if(it.length > 1) it.trimStart { c: Char -> c == "0".toCharArray()[0] } else it
-                }else  {
-                    "0"
-                }
-
-            },
-            onPriceChange = {if(it.last().isDigit() || it.last() == ".".toCharArray()[0]){
-                val dotCount = it.count {char -> char == ".".toCharArray()[0] }
-                if(dotCount < 2){
-                    price = it
-                }
-            }},
-            onSubtotalChange = { }
+            description = addItemDialogState.value.description,
+            quantity = addItemDialogState.value.quantity,
+            price = addItemDialogState.value.price,
+            subtotal = addItemDialogState.value.subtotal,
+            onDescriptionChange = {viewModel.dialogEvent(AddEditDialogEvent.OnDescriptionChange(it))},
+            onQuantityChange = { viewModel.dialogEvent(AddEditDialogEvent.OnQuantityChange(it)) },
+            onPriceChange = {viewModel.dialogEvent(AddEditDialogEvent.OnPriceChange(it)) },
+            onSubtotalChange = { viewModel.dialogEvent(AddEditDialogEvent.OnSubtotalChange(it)) }
         )
 
     }
