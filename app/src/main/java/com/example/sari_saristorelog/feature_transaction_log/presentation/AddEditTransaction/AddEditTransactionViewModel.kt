@@ -112,7 +112,7 @@ class AddEditTransactionViewModel @Inject constructor(
                 val subtotal = if(price.isNotEmpty() && price.isNotBlank()){
                     (price.toDouble() * quantity.toInt()).toString()
                 }else{
-                    "0.0"
+                    "0"
                 }
 
 
@@ -124,15 +124,8 @@ class AddEditTransactionViewModel @Inject constructor(
                 val text = event.price.text
                 var quantity = addItemDialogState.value.quantity.text
                 var thisPrice = "0"
-                if(text.length <= 5 && text.isNotEmpty() &&
-                    (text.last().isDigit() ||
-                            text.last() == ".".toCharArray()[0])){
-                    val trimText = text.trimStart("0".toCharArray()[0])
-                    thisPrice = if (trimText.isNotEmpty() || trimText.isNotBlank()){
-                                   trimText
-                                }else{
-                                   text
-                                }
+                if(isDoubleString(text)){
+                    thisPrice = validateStringDouble(text)
                 }
 
                 val thisSubtotal: String = (quantity.toDouble() * thisPrice.toDouble()).toString()
@@ -140,7 +133,7 @@ class AddEditTransactionViewModel @Inject constructor(
 
                 _addItemDialogState.value = addItemDialogState.value.copy(
                     price = TextFieldValue(text = thisPrice, selection = TextRange(thisPrice.length)),
-                    subtotal = TextFieldValue(text = thisSubtotal, selection = TextRange(thisSubtotal.length))
+                    subtotal = TextFieldValue(text = thisSubtotal, selection = TextRange.Zero)
                 )
             }
             is AddEditDialogEvent.OnSubtotalChange -> {
@@ -148,22 +141,13 @@ class AddEditTransactionViewModel @Inject constructor(
                 var quantity = addItemDialogState.value.quantity.text
                 var thisPrice = "0"
                 var thisSubtotal = "0.0"
-                if(text.isNotEmpty() && (text.last().isDigit() ||
-                    text.last() == "0".toCharArray()[0]) && text.length <= 5){
-                    val trimText = text.trimStart("0".toCharArray()[0])
-                    thisSubtotal = if (trimText.isNotEmpty() || trimText.isNotBlank()){
-                                      trimText
-                                   }else{
-                                       text
-                                   } }
+                if(isDoubleString(text)){
+                    thisSubtotal = validateStringDouble(text)}
 
-                if(quantity.toInt() != 0){
-                    thisPrice = thisSubtotal.toDouble().div(quantity.toInt()).toString()
-                }
 
 
                 _addItemDialogState.value = addItemDialogState.value.copy(
-                    price = TextFieldValue(text = thisPrice, selection = TextRange(thisPrice.length)),
+                    price = TextFieldValue(text = "", selection = TextRange.Zero),
                     subtotal = TextFieldValue(text = thisSubtotal, selection = TextRange(thisSubtotal.length))
                 )
             }
@@ -183,6 +167,22 @@ class AddEditTransactionViewModel @Inject constructor(
                 resetAddItemState()
             }
         }
+    }
+
+    private fun validateStringDouble(double: String): String{
+        val trimDouble = double.trimStart("0".toCharArray()[0])
+
+        return if (trimDouble.isNotEmpty() || trimDouble.isNotBlank()){
+            trimDouble
+        }else{
+            double
+        }
+    }
+
+    private fun isDoubleString(digit: String): Boolean{
+        return digit.length <= 5 && digit.isNotEmpty() &&
+                (digit.last().isDigit() ||
+                        digit.last() == ".".toCharArray()[0])
     }
 
     private fun resetAddItemState(){
