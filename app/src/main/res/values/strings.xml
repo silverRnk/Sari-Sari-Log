@@ -2,4 +2,8 @@
     <string name="app_name">Sari-Sari Store Log</string>
     <string name="nav_item_1">Home</string>
     <string name="nav_item_2">Add</string>
+    <string name="date_select_button1">calendar</string>
+    <string name="date_select_button2">clock</string>
+    <string name="date_select_button3">reset</string>
+    <string name="date_select_button4">show</string>
 </resources>

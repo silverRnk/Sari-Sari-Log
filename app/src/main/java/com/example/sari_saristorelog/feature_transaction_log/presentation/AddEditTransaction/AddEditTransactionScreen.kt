@@ -1,17 +1,20 @@
-﻿@file:OptIn(ExperimentalComposeUiApi::class)
-
+﻿
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -19,19 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
+import com.example.sari_saristorelog.R
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.AddItem
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.AddItemDialog
-import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.CustomerInfoFill
+import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.CustomerInfoForm
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.Item
 import com.example.sari_saristorelog.feature_transaction_log.presentation.util.PickerColor
 import com.example.sari_saristorelog.ui.theme.Surface1
@@ -39,13 +40,18 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
+
+const val ICON_HORIZONTAL_SPACING = 30
 
 @Composable
 fun AddEditTransactionScreen(
     navController: NavController,
     viewModel: AddEditTransactionViewModel = hiltViewModel()
 ){
+    val dialogShape = RoundedCornerShape(10.dp)
 
     val itemsState = viewModel.itemState
     val customerInfoState = viewModel.customerInfoState
@@ -91,6 +97,7 @@ fun AddEditTransactionScreen(
     MaterialDialog(
         dialogState = datePickerDialog,
         backgroundColor = Color.White,
+        shape = dialogShape,
         buttons = {
             positiveButton(
                 text = "Ok",
@@ -120,6 +127,7 @@ fun AddEditTransactionScreen(
     MaterialDialog(
         dialogState = timePickerDialog,
         backgroundColor = Color.White,
+        shape = dialogShape,
         buttons = {
             positiveButton(
                 text = "Ok",
@@ -144,38 +152,11 @@ fun AddEditTransactionScreen(
         )
     }
 
-    var description by remember {
-        mutableStateOf("")
-    }
-
-    var quantityTextFieldValue by remember {
-        mutableStateOf(TextFieldValue(text = "0"))
-    }
-
-    var priceTextFieldValue by remember {
-        mutableStateOf(TextFieldValue(text = "0"))
-    }
-
-    var subtotalTextFieldValue by remember {
-        mutableStateOf(TextFieldValue(text = "0"))
-    }
-
-    var subtotal: State<Float> by remember {
-        mutableStateOf(
-            derivedStateOf {
-                val price = priceTextFieldValue.text
-                val quality = quantityTextFieldValue.text
-
-            if(price.isDigitsOnly() && price.isDigitsOnly()){
-                price.toFloat() * quality.toInt()
-            }else 0.00f
-        })
-    }
 
     MaterialDialog(
         dialogState = addItemDialog,
         backgroundColor = Surface1,
-        shape = RectangleShape,
+        shape = dialogShape,
         buttons = {
             positiveButton(
                 text = "Ok",
@@ -187,7 +168,8 @@ fun AddEditTransactionScreen(
 
             negativeButton(
                 text = "Cancel",
-                textStyle = MaterialTheme.typography.h1.copy(fontSize = 15.sp,color = Color.Black))
+                textStyle = MaterialTheme.typography.h1.copy(fontSize = 15.sp,color = Color.Black),
+                onClick = {viewModel.dialogEvent(AddEditDialogEvent.OnCancel)})
         }
     ) {
 
@@ -207,64 +189,139 @@ fun AddEditTransactionScreen(
     }
 
 
+
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CustomerInfoFill(
+        CustomerInfoForm(
             customerIcon = customerInfoState.value.customerIcon,
             customerName = customerInfoState.value.name,
             onNameChange = {viewModel.onEvent(AddEditTransactionEvent.OnNameTextFieldChange(it))},
             onToggleIconSelection = {viewModel.onEvent(AddEditTransactionEvent.OnToggleIconSelection)},
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(listSize.width + 0.02f)
                 .wrapContentHeight())
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         //Total
         Box(modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(listSize.width)
             .wrapContentHeight()){
 
-            Row(modifier = Modifier.fillMaxWidth(),
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start) {
-                Text(
-                    text = dateFormatter.value,
-                    style = MaterialTheme.typography.h3,
-                    fontSize = 18.sp,
-                    modifier = Modifier
-                        .padding(start = 5.dp)
-                        .clickable {
-                            datePickerDialog.show()
-                        })
 
-                Spacer(modifier = Modifier.width(5.dp))
+                val iconsModifier = Modifier.size(28.dp)
 
-                Text(
-                    text = timeFormatter.value,
-                    style = MaterialTheme.typography.h3,
-                    fontSize = 18.sp,
-                    modifier = Modifier.clickable {
-                        timePickerDialog.show()
-                    })
+                Box(modifier = Modifier
+                    .wrapContentSize()
+                    .clip(RoundedCornerShape(5.dp))
+                    .clickable { datePickerDialog.show() }
+                    ){
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "calendar",
+                        modifier = iconsModifier)
+                }
 
-                Spacer(modifier = Modifier.width(15.dp))
+                Spacer(modifier = Modifier.width(ICON_HORIZONTAL_SPACING.toDouble().dp))
 
-                Text(text = "Total: ${itemsState.value.total}",
-                    style = MaterialTheme.typography.h2,
-                    fontSize = 30.sp,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(end = 20.dp))
+                Box(modifier = Modifier
+                    .wrapContentSize()
+                    .clip(RoundedCornerShape(5.dp))
+                    .clickable { timePickerDialog.show() }
+                ){
+                    Icon(painter = painterResource(id = R.drawable.ic_time_24),
+                        contentDescription = "Time",
+                        modifier = iconsModifier)
+                }
+
+                Spacer(modifier = Modifier.width(ICON_HORIZONTAL_SPACING.toDouble().dp))
+
+                Box(modifier = Modifier
+                    .wrapContentSize()
+                    .clip(RoundedCornerShape(5.dp))
+                    .clickable { timePickerDialog.show() }
+                ){
+                    Icon(painter = painterResource(id = R.drawable.ic_refresh_24),
+                        contentDescription = "refresh",
+                        modifier = iconsModifier)
+                }
+
+                Spacer(modifier = Modifier.width(ICON_HORIZONTAL_SPACING.toDouble().dp))
+
+                Box(modifier = Modifier
+                    .wrapContentSize()
+                    .clip(CircleShape)
+                    .background(if (dateState.value.isVisible) Color.LightGray else Color.Transparent)
+                    .clickable { viewModel.onEvent(AddEditTransactionEvent.OnToggleDate) }
+                ){
+                    Icon(painter = painterResource(id = R.drawable.ic_arrow_down_24),
+                        contentDescription = "arrow_down",
+                        modifier = iconsModifier)
+                }
+
             }
-
 
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        //Todo add visibleState
+        AnimatedVisibility(
+            visible = dateState.value.isVisible,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically(),
+            modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+        ) {
+
+            Box(modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight()
+                .background(Color.Gray)){
+                Row(modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start) {
+                    Text(
+                        text = dateFormatter.value,
+                        style = MaterialTheme.typography.h3,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            )
+
+                    Spacer(modifier = Modifier.width(5.dp))
+
+                    Text(
+                        text = timeFormatter.value,
+                        style = MaterialTheme.typography.h3,
+                        fontSize = 18.sp,
+                        )}
+            }
+
+        }
+
+        Box(modifier = Modifier
+            .fillMaxWidth(listSize.width)
+            .wrapContentHeight()){
+
+            val doubleFormatter = DecimalFormat("#.##")
+            doubleFormatter.roundingMode = RoundingMode.DOWN
+            val roundedTotal = doubleFormatter.format(itemsState.value.total)
+
+            BasicText(
+                text = "Total: $roundedTotal",
+                style = MaterialTheme.typography.h2.copy(fontSize = 30.sp),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .align(Alignment.CenterStart))
+        }
+
+        Spacer(modifier = Modifier.height(5.dp))
 
         //Header
         Box(modifier = Modifier

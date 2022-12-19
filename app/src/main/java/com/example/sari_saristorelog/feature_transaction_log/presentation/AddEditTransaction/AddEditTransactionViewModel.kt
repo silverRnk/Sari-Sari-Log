@@ -84,6 +84,9 @@ class AddEditTransactionViewModel @Inject constructor(
                     items = itemState.value.items.plus(event.items)
                 )
             }
+            is AddEditTransactionEvent.OnToggleDate -> {
+                _dateState.value = dateState.value.copy(isVisible = !dateState.value.isVisible)
+            }
         }
     }
 

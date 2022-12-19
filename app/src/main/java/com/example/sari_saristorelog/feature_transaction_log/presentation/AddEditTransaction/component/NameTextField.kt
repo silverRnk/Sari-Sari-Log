@@ -2,11 +2,13 @@ package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEd
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
@@ -18,7 +20,8 @@ fun NameTextField(
     Box(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(0.7f)
+            .clip(RoundedCornerShape(5.dp))
+            .fillMaxWidth(0.8f)
             .background(Color.White)) {
 
         BasicTextField(
@@ -29,7 +32,7 @@ fun NameTextField(
             maxLines = 1,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 5.dp, top = 5.dp, bottom = 5.dp))
+                .padding(start = 5.dp, top = 5.dp))
     }
 
 }

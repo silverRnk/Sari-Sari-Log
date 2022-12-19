@@ -5,5 +5,6 @@ import java.time.LocalTime
 
 data class DateState(
     val currentDate: LocalDate = LocalDate.now(),
-    val currentTime: LocalTime = LocalTime.now()
+    val currentTime: LocalTime = LocalTime.now(),
+    val isVisible: Boolean = false
 )

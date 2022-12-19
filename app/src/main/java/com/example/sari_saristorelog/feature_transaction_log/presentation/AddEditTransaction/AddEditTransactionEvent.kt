@@ -13,5 +13,6 @@ sealed class AddEditTransactionEvent{
     data class OnChangeDate(val date: LocalDate): AddEditTransactionEvent()
     data class OnChangeTime(val time: LocalTime): AddEditTransactionEvent()
     data class OnPositiveButton(val items: Items): AddEditTransactionEvent()
+    object OnToggleDate: AddEditTransactionEvent()
 
 }
