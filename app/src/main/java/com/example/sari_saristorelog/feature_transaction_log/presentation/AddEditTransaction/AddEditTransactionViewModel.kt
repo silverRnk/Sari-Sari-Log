@@ -163,7 +163,8 @@ class AddEditTransactionViewModel @Inject constructor(
                     subtotal = _addItemDialogState.value.subtotal.text.toDouble()
                 )
 
-                _itemState.value = itemState.value.copy(items = itemList.plus(newItem))
+                _itemState.value = itemState.value.copy(items = itemList.plus(newItem),
+                    total = itemState.value.total.plus(newItem.subtotal))
                 resetAddItemState()
             }
             else -> {
