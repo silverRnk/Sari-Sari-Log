@@ -2,19 +2,21 @@ package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEd
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.sari_saristorelog.core.data.util.CustomerIcons
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
-import com.example.sari_saristorelog.feature_transaction_log.domain.model.deprecated.Customer
 import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.TransactionLogUseCases
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.AddItemDialogState
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.CustomerInfoState
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.DateState
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.ItemState
+import com.example.sari_saristorelog.feature_transaction_log.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +35,9 @@ class AddEditTransactionViewModel @Inject constructor(
 
     private val _addItemDialogState = mutableStateOf(AddItemDialogState())
     val addItemDialogState: State<AddItemDialogState> = _addItemDialogState
+
+    private val _uiState = MutableSharedFlow<UiState>()
+    val uiState = _uiState.asSharedFlow()
 
     fun onEvent(event: AddEditTransactionEvent){
         when(event){
@@ -90,6 +95,7 @@ class AddEditTransactionViewModel @Inject constructor(
         }
     }
 
+
     fun dialogEvent(event: AddEditDialogEvent){
         when(event){
             is AddEditDialogEvent.OnDescriptionChange -> {
@@ -98,74 +104,48 @@ class AddEditTransactionViewModel @Inject constructor(
                 )
             }
             is AddEditDialogEvent.OnQuantityChange -> {
-                val text = event.quantity.text
-                val price = addItemDialogState.value.price.text
-                val quantity:String = if (text.isDigitsOnly()
-                                 && !text.isNullOrEmpty() && text.length <= 5){
-                                   if (text.contains(Regex("[1-9]"))){
-                                       text.trimStart("0".toCharArray()[0])
-                                   }else{
-                                       text
-                                   }
-                                 }else if(text.isDigitsOnly()
-                                     && !text.isNullOrEmpty() && text.length >= 5){
-                                      addItemDialogState.value.quantity.text
-                                 } else{ "0" }
-
-                val subtotal = if(price.isNotEmpty() && price.isNotBlank()){
-                    (price.toDouble() * quantity.toInt()).toString()
-                }else{
-                    "0"
-                }
-
-
                 _addItemDialogState.value = addItemDialogState.value.copy(
-                    quantity = TextFieldValue(text = quantity, selection = TextRange(quantity.length)),
-                    subtotal = TextFieldValue(text = subtotal, selection = TextRange(subtotal.length)))
+                    quantity = event.quantity,
+                    isQuantityInvalidInput = !(event.quantity.isDigitsOnly() && event.quantity.isNotEmpty())
+                )
+
             }
             is AddEditDialogEvent.OnPriceChange -> {
-                val text = event.price.text
-                var quantity = addItemDialogState.value.quantity.text
-                var thisPrice = "0"
-                if(isDoubleString(text)){
-                    thisPrice = validateStringDouble(text)
+                if (isDoubleString(event.price)){
+                    _addItemDialogState.value = addItemDialogState.value.copy(
+                        price = event.price
+                    )
                 }
-
-                val thisSubtotal: String = (quantity.toDouble() * thisPrice.toDouble()).toString()
-
-
-                _addItemDialogState.value = addItemDialogState.value.copy(
-                    price = TextFieldValue(text = thisPrice, selection = TextRange(thisPrice.length)),
-                    subtotal = TextFieldValue(text = thisSubtotal, selection = TextRange.Zero)
-                )
             }
             is AddEditDialogEvent.OnSubtotalChange -> {
-                val text = event.subtotal.text
-                var quantity = addItemDialogState.value.quantity.text
-                var thisPrice = "0"
-                var thisSubtotal = "0.0"
-                if(isDoubleString(text)){
-                    thisSubtotal = validateStringDouble(text)}
-
-
-
-                _addItemDialogState.value = addItemDialogState.value.copy(
-                    price = TextFieldValue(text = "", selection = TextRange.Zero),
-                    subtotal = TextFieldValue(text = thisSubtotal, selection = TextRange(thisSubtotal.length))
-                )
+                if (isDoubleString(event.subtotal)){
+                    _addItemDialogState.value = addItemDialogState.value.copy(
+                        subtotal = event.subtotal,
+                        isSubtotalInputError = event.subtotal.isEmpty()
+                    )
+                }
             }
             is AddEditDialogEvent.OnPositiveButton -> {
-                val itemList = itemState.value.items
-                val newItem = Items(
-                    description = _addItemDialogState.value.description,
-                    quantity = _addItemDialogState.value.quantity.text.toInt(),
-                    price = _addItemDialogState.value.price.text.toDouble(),
-                    subtotal = _addItemDialogState.value.subtotal.text.toDouble()
-                )
+                viewModelScope.launch {
+                    try {
+                        val itemList = itemState.value.items
+                        val newItem = Items(
+                            description = _addItemDialogState.value.description,
+                            quantity = _addItemDialogState.value.quantity.toInt(),
+                            price = if (_addItemDialogState.value.price.isEmpty()) null else _addItemDialogState.value.price.toDouble(),
+                            subtotal = _addItemDialogState.value.subtotal.toDouble()
+                        )
 
-                _itemState.value = itemState.value.copy(items = itemList.plus(newItem),
-                    total = itemState.value.total.plus(newItem.subtotal))
-                resetAddItemState()
+                        _itemState.value = itemState.value.copy(items = itemList.plus(newItem),
+                            total = itemState.value.total.plus(newItem.subtotal))
+                    }catch (e: Exception){
+                        _uiState.emit(UiState.ShowSnackBar("Invalid Input"))
+                    }
+                    resetAddItemState()
+                }
+
+
+
             }
             else -> {
                 resetAddItemState()
@@ -184,7 +164,7 @@ class AddEditTransactionViewModel @Inject constructor(
     }
 
     private fun isDoubleString(digit: String): Boolean{
-        return digit.length <= 5 && digit.isNotEmpty() &&
+        return digit.length <= 5 &&
                 (digit.last().isDigit() ||
                         digit.last() == ".".toCharArray()[0])
     }
