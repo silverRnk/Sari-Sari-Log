@@ -121,8 +121,11 @@ class AddEditTransactionViewModel @Inject constructor(
                 if (isDoubleString(event.subtotal)){
                     _addItemDialogState.value = addItemDialogState.value.copy(
                         subtotal = event.subtotal,
-                        isSubtotalInputError = event.subtotal.isEmpty()
-                    )
+                        isSubtotalInvalidInput = event.subtotal.isEmpty())
+                }else if(event.subtotal.isEmpty()){
+                    _addItemDialogState.value = addItemDialogState.value.copy(
+                        subtotal = event.subtotal,
+                        isSubtotalInvalidInput = event.subtotal.isEmpty())
                 }
             }
             is AddEditDialogEvent.OnPositiveButton -> {
@@ -164,7 +167,11 @@ class AddEditTransactionViewModel @Inject constructor(
     }
 
     private fun isDoubleString(digit: String): Boolean{
-        return digit.length <= 5 &&
+        val dotCount = digit.count {
+            it == ".".toCharArray()[0]
+        }
+        return digit.length <= 10 && digit.isNotEmpty() &&
+                dotCount <= 1 &&
                 (digit.last().isDigit() ||
                         digit.last() == ".".toCharArray()[0])
     }
