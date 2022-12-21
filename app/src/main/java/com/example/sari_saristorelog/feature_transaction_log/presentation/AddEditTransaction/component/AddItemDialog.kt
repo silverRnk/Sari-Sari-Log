@@ -1,19 +1,19 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sari_saristorelog.ui.theme.Surface1
@@ -21,16 +21,30 @@ import com.example.sari_saristorelog.ui.theme.Surface1
 @Composable
 fun AddItemDialog(
     description: String,
-    quantity: TextFieldValue,
-    price: TextFieldValue,
-    subtotal: TextFieldValue,
+    quantity: String,
+    price: String,
+    subtotal: String,
     onDescriptionChange: (String) -> Unit,
-    onQuantityChange: (TextFieldValue) -> Unit,
-    onPriceChange: (TextFieldValue) -> Unit,
-    onSubtotalChange: (TextFieldValue) -> Unit,
+    onQuantityChange: (String) -> Unit,
+    onPriceChange: (String) -> Unit,
+    onSubtotalChange: (String) -> Unit,
+    isQuantityInputInvalid: Boolean,
+    isSubtotalInputInvalid: Boolean,
     backgroundColor: Color = Surface1,
 ){
     val dialogShape = RoundedCornerShape(10.dp)
+
+    val qtyBoarderAnimatable = animateColorAsState(
+        targetValue = if (isQuantityInputInvalid) Color.Red else Color.Black,
+         animationSpec = spring(
+             dampingRatio = Spring.DampingRatioHighBouncy,
+             stiffness = Spring.StiffnessMedium)
+         )
+
+    val subtotalBoarderAnimatable = animateColorAsState(
+        targetValue = if (isSubtotalInputInvalid) Color.Red else Color.Black,
+        animationSpec = spring(dampingRatio = 0.5f)
+    )
 
 
     Column(horizontalAlignment = Alignment.Start,
@@ -81,7 +95,7 @@ fun AddItemDialog(
                 .wrapContentHeight()
                 .padding(start = 5.dp, end = 5.dp)) {
                 Text(
-                    text = "Qty",
+                    text = "Qty*",
                     style = MaterialTheme.typography.h3,
                     fontSize = 18.sp,
                     modifier = Modifier
@@ -96,7 +110,12 @@ fun AddItemDialog(
                         .height(60.dp)
                         .clip(dialogShape)
                         .background(Color.White)
-                        .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
+                        .border(width = 1.25.dp, color = qtyBoarderAnimatable.value, shape = dialogShape))
+                Text(
+                    text = "Invalid Input!",
+                    color = if (isQuantityInputInvalid) Color.Red else Color.Transparent,
+                    style = MaterialTheme.typography.body1.copy(fontSize = 10.sp)
+                )
             }
 
             Column(modifier = Modifier
@@ -132,10 +151,10 @@ fun AddItemDialog(
             .padding(start = 10.dp, end = 10.dp),
              horizontalAlignment = Alignment.Start) {
             Text(
-                text = "Subtotal",
+                text = "Subtotal*",
                 style = MaterialTheme.typography.h3,
                 fontSize = 18.sp,
-                modifier = Modifier.padding(start = 15.dp))
+                modifier = Modifier.padding(start = 5.dp))
 
             NumberTextField(
                 value = subtotal,
@@ -145,7 +164,12 @@ fun AddItemDialog(
                     .height(60.dp)
                     .clip(dialogShape)
                     .background(Color.White)
-                    .border(width = 1.25.dp, color = Color.Black, shape = dialogShape))
+                    .border(width = 1.25.dp, color = subtotalBoarderAnimatable.value, shape = dialogShape))
+            Text(
+                text = "Invalid Input!",
+                color = if (isSubtotalInputInvalid) Color.Red else Color.Transparent,
+                style = MaterialTheme.typography.body1.copy(fontSize = 10.sp)
+            )
         }
 
 

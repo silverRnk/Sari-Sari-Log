@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun NumberTextField(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     imeAction: ImeAction = ImeAction.Default,
     modifier: Modifier = Modifier
 ){
