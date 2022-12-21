@@ -43,7 +43,9 @@ fun AddItemDialog(
 
     val subtotalBoarderAnimatable = animateColorAsState(
         targetValue = if (isSubtotalInputInvalid) Color.Red else Color.Black,
-        animationSpec = spring(dampingRatio = 0.5f)
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessMedium)
     )
 
 

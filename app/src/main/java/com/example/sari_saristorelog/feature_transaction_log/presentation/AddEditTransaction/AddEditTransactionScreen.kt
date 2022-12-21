@@ -17,13 +17,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,11 +33,13 @@ import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEdi
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.CustomerInfoForm
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component.Item
 import com.example.sari_saristorelog.feature_transaction_log.presentation.util.PickerColor
+import com.example.sari_saristorelog.feature_transaction_log.presentation.util.UiState
 import com.example.sari_saristorelog.ui.theme.Surface1
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.flow.collectLatest
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
@@ -49,7 +49,8 @@ const val ICON_HORIZONTAL_SPACING = 30
 @Composable
 fun AddEditTransactionScreen(
     navController: NavController,
-    viewModel: AddEditTransactionViewModel = hiltViewModel()
+    viewModel: AddEditTransactionViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState
 ){
     val dialogShape = RoundedCornerShape(10.dp)
 
@@ -57,6 +58,9 @@ fun AddEditTransactionScreen(
     val customerInfoState = viewModel.customerInfoState
     val dateState = viewModel.dateState
     val addItemDialogState = viewModel.addItemDialogState
+
+
+
 
     val dateFormatter by remember {
         mutableStateOf(
@@ -90,7 +94,17 @@ fun AddEditTransactionScreen(
     }
 
     LaunchedEffect(key1 = 1){
-        //TODO add navigation
+        viewModel.uiState.collectLatest { event ->
+            when(event){
+                is UiState.ShowSnackBar ->{
+                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                }
+                is UiState.OnNavigate -> {
+
+                }
+            }
+
+        }
     }
 
 
@@ -183,7 +197,9 @@ fun AddEditTransactionScreen(
             onDescriptionChange = {viewModel.dialogEvent(AddEditDialogEvent.OnDescriptionChange(it))},
             onQuantityChange = { viewModel.dialogEvent(AddEditDialogEvent.OnQuantityChange(it)) },
             onPriceChange = {viewModel.dialogEvent(AddEditDialogEvent.OnPriceChange(it)) },
-            onSubtotalChange = { viewModel.dialogEvent(AddEditDialogEvent.OnSubtotalChange(it)) }
+            onSubtotalChange = { viewModel.dialogEvent(AddEditDialogEvent.OnSubtotalChange(it)) },
+            isQuantityInputInvalid = addItemDialogState.value.isQuantityInvalidInput,
+            isSubtotalInputInvalid = addItemDialogState.value.isSubtotalInvalidInput
         )
 
     }

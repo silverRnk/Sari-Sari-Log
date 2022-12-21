@@ -20,6 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 @Composable
 fun Item(
@@ -99,12 +101,14 @@ fun Item(
             Box(modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(0.8f)){
+                val subtotalFormat = DecimalFormat("#.##")
+                subtotalFormat.roundingMode = RoundingMode.DOWN
 
                 Row(modifier = Modifier.matchParentSize(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center) {
                     Text(
-                        text = items.subtotal.toString(),
+                        text = subtotalFormat.format(items.subtotal),
                         style = MaterialTheme.typography.h3,
                         maxLines = 1,
                         overflow = TextOverflow.Clip,

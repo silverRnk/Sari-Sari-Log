@@ -6,5 +6,5 @@ data class AddItemDialogState(
     val isQuantityInvalidInput: Boolean = false,
     val price: String = "",
     val subtotal: String = "0",
-    val isSubtotalInputError: Boolean = false
+    val isSubtotalInvalidInput: Boolean = false
 )

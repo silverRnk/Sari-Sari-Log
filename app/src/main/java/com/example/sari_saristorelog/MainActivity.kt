@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
 
 
                     Scaffold(
+                        scaffoldState = scaffoldState,
                         bottomBar = { BottomNavigation(backgroundColor = Color.White
                         ) {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -83,7 +84,7 @@ class MainActivity : ComponentActivity() {
                                 HomeScreen()
                             }
                             composable(BottomNavigationItems.Add.route){
-                                AddEditTransactionScreen(navController = navController)
+                                AddEditTransactionScreen(navController = navController, scaffoldState = scaffoldState)
                             }
                         }
                         
