@@ -65,10 +65,17 @@ class AddEditTransactionViewModel @Inject constructor(
             }
             is AddEditTransactionEvent.OnDeleteItem -> {
                 if ((event.itemIndex+1) <= itemState.value.items.size){
+                    var newList = itemState.value.items.filterIndexed { index, _ ->
+                        index != event.itemIndex}
+                    var newTotal: Double = 0.0
+                    newList.forEach {
+                        newTotal += it.subtotal
+                    }
+
                     _itemState.value = itemState.value.copy(
-                        items = itemState.value.items.filterIndexed { index, _ ->
-                        index != event.itemIndex
-                    })
+                        items = newList,
+                        total = newTotal
+                    )
                 }
             }
             is AddEditTransactionEvent.OnAddTransaction -> {
@@ -131,24 +138,49 @@ class AddEditTransactionViewModel @Inject constructor(
             is AddEditDialogEvent.OnPositiveButton -> {
                 viewModelScope.launch {
                     try {
-                        val itemList = itemState.value.items
+                        val itemList = itemState.value.items.toMutableList()
                         val newItem = Items(
                             description = _addItemDialogState.value.description,
                             quantity = _addItemDialogState.value.quantity.toInt(),
                             price = if (_addItemDialogState.value.price.isEmpty()) null else _addItemDialogState.value.price.toDouble(),
                             subtotal = _addItemDialogState.value.subtotal.toDouble()
                         )
+                        if (addItemDialogState.value.itemIndex != -1){
+                            itemList[addItemDialogState.value.itemIndex] = newItem
+                            var newTotal: Double = 0.0
+                            itemList.forEach {
+                                newTotal += it.subtotal
+                            }
+                            _itemState.value = itemState.value.copy(
+                                items = itemList,
+                                total = newTotal
+                            )
+                        }else{
+                            _itemState.value = itemState.value.copy(items = itemList.plus(newItem),
+                                total = itemState.value.total.plus(newItem.subtotal))
+                        }
 
-                        _itemState.value = itemState.value.copy(items = itemList.plus(newItem),
-                            total = itemState.value.total.plus(newItem.subtotal))
+
+
                     }catch (e: Exception){
                         _uiState.emit(UiState.ShowSnackBar("Invalid Input"))
                     }
                     resetAddItemState()
                 }
 
-
-
+            }
+            is AddEditDialogEvent.OnAddEditItem -> {
+                if (event.index != -1){
+                    _addItemDialogState.value = addItemDialogState.value.copy(
+                        itemIndex = event.index,
+                        description = itemState.value.items[event.index].description,
+                        quantity = itemState.value.items[event.index].quantity.toString(),
+                        price = itemState.value.items[event.index].price?.toString()?: "",
+                        subtotal = itemState.value.items[event.index].subtotal.toString()
+                    )
+                }else{
+                    resetAddItemState()
+                }
             }
             else -> {
                 resetAddItemState()
