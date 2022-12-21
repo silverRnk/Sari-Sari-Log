@@ -55,14 +55,6 @@ class AddEditTransactionViewModel @Inject constructor(
                     )
                 )
             }
-            is AddEditTransactionEvent.OnAddEditItem -> {
-                //@Todo Implement AddEditTransaction OnAddItem
-                if(event.itemIndex == -1){
-
-                }else{
-
-                }
-            }
             is AddEditTransactionEvent.OnDeleteItem -> {
                 if ((event.itemIndex+1) <= itemState.value.items.size){
                     var newList = itemState.value.items.filterIndexed { index, _ ->
@@ -89,11 +81,6 @@ class AddEditTransactionViewModel @Inject constructor(
             is AddEditTransactionEvent.OnChangeTime -> {
                 _dateState.value = dateState.value.copy(
                     currentTime = event.time
-                )
-            }
-            is AddEditTransactionEvent.OnPositiveButton -> {
-                _itemState.value = itemState.value.copy(
-                    items = itemState.value.items.plus(event.items)
                 )
             }
             is AddEditTransactionEvent.OnToggleDate -> {

@@ -7,12 +7,10 @@ import java.time.LocalTime
 sealed class AddEditTransactionEvent{
     data class OnNameTextFieldChange(val name: String): AddEditTransactionEvent()
     object OnToggleIconSelection: AddEditTransactionEvent()
-    data class OnAddEditItem(val itemIndex: Int = -1): AddEditTransactionEvent()
     data class OnDeleteItem(val itemIndex: Int): AddEditTransactionEvent()
     object OnAddTransaction: AddEditTransactionEvent()
     data class OnChangeDate(val date: LocalDate): AddEditTransactionEvent()
     data class OnChangeTime(val time: LocalTime): AddEditTransactionEvent()
-    data class OnPositiveButton(val items: Items): AddEditTransactionEvent()
     object OnToggleDate: AddEditTransactionEvent()
 
 }
