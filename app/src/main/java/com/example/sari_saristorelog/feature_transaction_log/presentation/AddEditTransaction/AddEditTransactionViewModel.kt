@@ -51,7 +51,7 @@ class AddEditTransactionViewModel @Inject constructor(
                 val iconsCount = CustomerIcons.icons.size
                 _customerInfoState.value = customerInfoState.value.copy(
                     customerIcon = CustomerIcons.icons.elementAt(
-                        if(nextIcon > iconsCount) 1 else nextIcon
+                        if(nextIcon > iconsCount - 1) 0 else nextIcon
                     )
                 )
             }
@@ -59,7 +59,7 @@ class AddEditTransactionViewModel @Inject constructor(
                 if ((event.itemIndex+1) <= itemState.value.items.size){
                     var newList = itemState.value.items.filterIndexed { index, _ ->
                         index != event.itemIndex}
-                    var newTotal: Double = 0.0
+                    var newTotal = 0.0
                     newList.forEach {
                         newTotal += it.subtotal
                     }
@@ -72,6 +72,7 @@ class AddEditTransactionViewModel @Inject constructor(
             }
             is AddEditTransactionEvent.OnAddTransaction -> {
 
+                useCases.addTransaction(info = )
             }
             is AddEditTransactionEvent.OnChangeDate -> {
                 _dateState.value = dateState.value.copy(
@@ -134,7 +135,7 @@ class AddEditTransactionViewModel @Inject constructor(
                         )
                         if (addItemDialogState.value.itemIndex != -1){
                             itemList[addItemDialogState.value.itemIndex] = newItem
-                            var newTotal: Double = 0.0
+                            var newTotal = 0.0
                             itemList.forEach {
                                 newTotal += it.subtotal
                             }

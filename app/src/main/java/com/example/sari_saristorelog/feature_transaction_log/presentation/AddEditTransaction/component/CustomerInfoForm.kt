@@ -1,6 +1,9 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,10 +44,22 @@ fun CustomerInfoForm(
                 modifier = Modifier.size(25.dp))
         }
 
-        Icon(
-            painter = painterResource(id = customerIcon),
-            contentDescription = "CustomerIcon",
-            modifier = Modifier.size(60.dp))
+        Box(modifier = Modifier
+            .size(60.dp)
+            .clip(CircleShape)
+            .background(Color.White)
+            .border(width = 1.dp, Color.Black, shape = CircleShape)){
+
+            Image(
+                painter = painterResource(id = customerIcon),
+                contentDescription = "CustomerIcon",
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                modifier = Modifier
+                    .matchParentSize()
+                    .clip(CircleShape)
+                    .align(Alignment.Center))
+        }
 
         Spacer(modifier = Modifier.width(15.dp))
 

@@ -2,6 +2,8 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,8 +61,7 @@ fun AddEditTransactionScreen(
     val dateState = viewModel.dateState
     val addItemDialogState = viewModel.addItemDialogState
 
-
-
+    val animatedListCount = animateIntAsState(targetValue = itemsState.value.items.size)
 
     val dateFormatter by remember {
         mutableStateOf(
@@ -436,11 +437,10 @@ fun AddEditTransactionScreen(
                             .fillMaxWidth(listSize.width)
                             .height(listSize.height)
                             .clickable {
-                                viewModel.onEvent(
-                                    AddEditTransactionEvent.OnAddEditItem(
-                                        index
+                                viewModel.dialogEvent(
+                                    AddEditDialogEvent.OnAddEditItem(index = index)
                                     )
-                                )
+                                addItemDialog.show()
                             }
                             .background(Color.White),
                         OnDeleteItem = {viewModel.onEvent(AddEditTransactionEvent.OnDeleteItem(index))})
@@ -451,13 +451,16 @@ fun AddEditTransactionScreen(
                         .fillMaxWidth(listSize.width)
                         .height(listSize.height)
                         .background(Color.White)
-                        .clickable { addItemDialog.show() })
+                        .clickable {
+                            viewModel.dialogEvent(AddEditDialogEvent.OnAddEditItem())
+                            addItemDialog.show() })
                 }
             }
 
 
             FloatingActionButton(
                 onClick = {
+                viewModel.dialogEvent(AddEditDialogEvent.OnAddEditItem())
                 addItemDialog.show()},
                 backgroundColor = Color.White,
                 modifier = Modifier

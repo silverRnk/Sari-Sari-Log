@@ -116,7 +116,8 @@ fun AddItemDialog(
                 Text(
                     text = "Invalid Input!",
                     color = if (isQuantityInputInvalid) Color.Red else Color.Transparent,
-                    style = MaterialTheme.typography.body1.copy(fontSize = 10.sp)
+                    style = MaterialTheme.typography.body1.copy(fontSize = 10.sp),
+                    modifier = Modifier.padding(start = 15.dp)
                 )
             }
 
@@ -150,7 +151,7 @@ fun AddItemDialog(
         Column(modifier = Modifier
             .fillMaxWidth(0.5f)
             .wrapContentHeight()
-            .padding(start = 10.dp, end = 10.dp),
+            .padding(start = 15.dp, end = 10.dp),
              horizontalAlignment = Alignment.Start) {
             Text(
                 text = "Subtotal*",
@@ -170,7 +171,8 @@ fun AddItemDialog(
             Text(
                 text = "Invalid Input!",
                 color = if (isSubtotalInputInvalid) Color.Red else Color.Transparent,
-                style = MaterialTheme.typography.body1.copy(fontSize = 10.sp)
+                style = MaterialTheme.typography.body1.copy(fontSize = 10.sp),
+                modifier = Modifier.padding(start = 5.dp)
             )
         }
 

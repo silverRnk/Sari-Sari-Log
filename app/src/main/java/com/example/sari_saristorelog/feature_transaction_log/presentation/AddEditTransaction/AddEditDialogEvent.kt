@@ -8,4 +8,5 @@ sealed class AddEditDialogEvent{
     data class OnSubtotalChange(val subtotal: String): AddEditDialogEvent()
     object OnPositiveButton: AddEditDialogEvent()
     object OnCancel: AddEditDialogEvent()
+    data class OnAddEditItem(val index: Int = -1): AddEditDialogEvent()
 }

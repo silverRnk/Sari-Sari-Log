@@ -5,5 +5,6 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.model.Transa
 data class TransactionLogUseCases(
     val getTransactionInfoList: GetTransactionInfoList,
     val filterByDate: FilterByDate,
-    val filterByName: FilterByName
+    val filterByName: FilterByName,
+    val addTransaction: AddTransaction
 )

@@ -6,10 +6,7 @@ import com.example.sari_saristorelog.core.data.repository.ApplicationDao
 import com.example.sari_saristorelog.core.data.repository.ApplicationDataBase
 import com.example.sari_saristorelog.feature_transaction_log.data.repository.LoggerRepositoryImp
 import com.example.sari_saristorelog.feature_transaction_log.domain.repository.LoggerRepository
-import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.FilterByDate
-import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.FilterByName
-import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.GetTransactionInfoList
-import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.TransactionLogUseCases
+import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +38,8 @@ class AppModule {
         return TransactionLogUseCases(
             getTransactionInfoList = GetTransactionInfoList(repository),
             filterByDate = FilterByDate(),
-            filterByName = FilterByName())
+            filterByName = FilterByName(),
+            addTransaction = AddTransaction(repository)
+        )
     }
 }
