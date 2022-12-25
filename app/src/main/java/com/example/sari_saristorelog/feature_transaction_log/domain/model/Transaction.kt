@@ -11,3 +11,5 @@ data class Transaction(
         entityColumn = "transactionId")
     val items: List<Items>
 )
+
+class InvalidTransaction(message: String): Exception(message)
