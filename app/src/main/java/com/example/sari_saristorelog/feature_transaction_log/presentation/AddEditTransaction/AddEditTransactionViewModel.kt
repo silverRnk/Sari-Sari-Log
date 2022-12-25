@@ -43,15 +43,18 @@ class AddEditTransactionViewModel @Inject constructor(
         when(event){
             is AddEditTransactionEvent.OnNameTextFieldChange -> {
                 _customerInfoState.value = customerInfoState.value.copy(
-                    name = event.name)
+                    info = customerInfoState.value.info.copy(
+                        customerName = event.name
+                    ))
             }
             is AddEditTransactionEvent.OnToggleIconSelection -> {
                 //@Todo Test Event for releiblity
-                val nextIcon = CustomerIcons.icons.indexOf(customerInfoState.value.customerIcon) + 1
+                val nextIcon = CustomerIcons.icons.indexOf(customerInfoState.value.info.customerIcon) + 1
                 val iconsCount = CustomerIcons.icons.size
                 _customerInfoState.value = customerInfoState.value.copy(
-                    customerIcon = CustomerIcons.icons.elementAt(
-                        if(nextIcon > iconsCount - 1) 0 else nextIcon
+                    info = customerInfoState.value.info.copy(
+                        customerIcon = CustomerIcons.icons.elementAt(
+                            if(nextIcon > iconsCount - 1) 0 else nextIcon)
                     )
                 )
             }
@@ -71,8 +74,11 @@ class AddEditTransactionViewModel @Inject constructor(
                 }
             }
             is AddEditTransactionEvent.OnAddTransaction -> {
-
-                useCases.addTransaction(info = )
+                viewModelScope.launch {
+                    useCases.addTransaction(
+                        info = customerInfoState.value.info,
+                        items = itemState.value.items)
+                }
             }
             is AddEditTransactionEvent.OnChangeDate -> {
                 _dateState.value = dateState.value.copy(
@@ -135,17 +141,25 @@ class AddEditTransactionViewModel @Inject constructor(
                         )
                         if (addItemDialogState.value.itemIndex != -1){
                             itemList[addItemDialogState.value.itemIndex] = newItem
-                            var newTotal = 0.0
+                            var newTotal = customerInfoState.value.info.total
                             itemList.forEach {
                                 newTotal += it.subtotal
                             }
                             _itemState.value = itemState.value.copy(
-                                items = itemList,
-                                total = newTotal
+                                items = itemList
+                            )
+                            _customerInfoState.value = customerInfoState.value.copy(
+                                info = customerInfoState.value.info.copy(
+                                    total = newTotal
+                                )
                             )
                         }else{
-                            _itemState.value = itemState.value.copy(items = itemList.plus(newItem),
-                                total = itemState.value.total.plus(newItem.subtotal))
+                            _itemState.value = itemState.value.copy(items = itemList.plus(newItem))
+                            _customerInfoState.value = customerInfoState.value.copy(
+                                info = customerInfoState.value.info.copy(
+                                total = customerInfoState.value.info.total.plus(addItemDialogState.value.subtotal.toDouble())
+                                )
+                            )
                         }
 
 
