@@ -4,17 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -26,6 +28,7 @@ import com.example.sari_saristorelog.core.util.BottomNavigationItems
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.AddEditTransactionScreen
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.HomeScreen
 import com.example.sari_saristorelog.ui.theme.SariSariStoreLogTheme
+import com.example.sari_saristorelog.ui.theme.Surface1
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,6 +50,23 @@ class MainActivity : ComponentActivity() {
 
                     Scaffold(
                         scaffoldState = scaffoldState,
+                        snackbarHost = {
+                         Box(modifier = Modifier
+                             .fillMaxWidth(0.6f)
+                             .height(70.dp)
+                             .background(Surface1.copy(alpha = 0.5f))
+                             .clip(RoundedCornerShape(30.dp))){
+                             Text(
+                                 text = it.currentSnackbarData?.message?: "",
+                                 style = MaterialTheme.typography.body1
+                                     .copy(
+                                         fontSize = 15.sp,
+                                         color = Color.Black.copy(alpha = 0.8f))
+                             )
+
+                         }
+
+                        },
                         bottomBar = { BottomNavigation(backgroundColor = Color.White
                         ) {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
