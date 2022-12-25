@@ -6,6 +6,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sari_saristorelog.core.data.util.CustomerIcons
+import com.example.sari_saristorelog.feature_transaction_log.domain.model.InvalidTransaction
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.Items
 import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.TransactionLogUseCases
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.state.AddItemDialogState
@@ -48,7 +49,6 @@ class AddEditTransactionViewModel @Inject constructor(
                     ))
             }
             is AddEditTransactionEvent.OnToggleIconSelection -> {
-                //@Todo Test Event for releiblity
                 val nextIcon = CustomerIcons.icons.indexOf(customerInfoState.value.info.customerIcon) + 1
                 val iconsCount = CustomerIcons.icons.size
                 _customerInfoState.value = customerInfoState.value.copy(
@@ -75,9 +75,14 @@ class AddEditTransactionViewModel @Inject constructor(
             }
             is AddEditTransactionEvent.OnAddTransaction -> {
                 viewModelScope.launch {
-                    useCases.addTransaction(
-                        info = customerInfoState.value.info,
-                        items = itemState.value.items)
+                    try{
+                        useCases.addTransaction(
+                            info = customerInfoState.value.info,
+                            items = itemState.value.items)
+                    }catch (e: InvalidTransaction){
+                        _uiState.emit(UiState.ShowSnackBar(e.message?: ""))
+                    }
+
                 }
             }
             is AddEditTransactionEvent.OnChangeDate -> {
@@ -190,7 +195,7 @@ class AddEditTransactionViewModel @Inject constructor(
         }
     }
 
-    private fun validateStringDouble(double: String): String{
+/*    private fun validateStringDouble(double: String): String{
         val trimDouble = double.trimStart("0".toCharArray()[0])
 
         return if (trimDouble.isNotEmpty() || trimDouble.isNotBlank()){
@@ -198,7 +203,7 @@ class AddEditTransactionViewModel @Inject constructor(
         }else{
             double
         }
-    }
+    }*/
 
     private fun isDoubleString(digit: String): Boolean{
         val dotCount = digit.count {
