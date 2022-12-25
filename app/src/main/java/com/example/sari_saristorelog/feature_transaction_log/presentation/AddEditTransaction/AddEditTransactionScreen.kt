@@ -213,8 +213,8 @@ fun AddEditTransactionScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         CustomerInfoForm(
-            customerIcon = customerInfoState.value.customerIcon,
-            customerName = customerInfoState.value.name,
+            customerIcon = customerInfoState.value.info.customerIcon,
+            customerName = customerInfoState.value.info.customerName,
             onNameChange = {viewModel.onEvent(AddEditTransactionEvent.OnNameTextFieldChange(it))},
             onToggleIconSelection = {viewModel.onEvent(AddEditTransactionEvent.OnToggleIconSelection)},
             modifier = Modifier
@@ -223,7 +223,7 @@ fun AddEditTransactionScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        //Total
+
         Box(modifier = Modifier
             .fillMaxWidth(listSize.width)
             .wrapContentHeight()){
@@ -322,13 +322,14 @@ fun AddEditTransactionScreen(
 
         }
 
+        //Total
         Box(modifier = Modifier
             .fillMaxWidth(listSize.width)
             .wrapContentHeight()){
 
             val doubleFormatter = DecimalFormat("#.##")
             doubleFormatter.roundingMode = RoundingMode.DOWN
-            val roundedTotal = doubleFormatter.format(itemsState.value.total)
+            val roundedTotal = doubleFormatter.format(customerInfoState.value.info.total)
 
             BasicText(
                 text = "Total: $roundedTotal",
