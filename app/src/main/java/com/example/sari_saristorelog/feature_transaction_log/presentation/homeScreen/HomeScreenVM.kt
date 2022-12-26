@@ -1,5 +1,6 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 
@@ -109,16 +110,16 @@ class HomeScreenVM @Inject constructor(
     }
 
     private fun updateFilterState(){
-        if (!searchBoxState.value.isEnable){
+        if (!searchBoxState.value.isEnable && searchBoxState.value.text.isEmpty()){
             filterState.value = FilterBy.Date(
                 fromDate = onDateFilterState.value.fromDate,
-                toDate = onDateFilterState.value.fromDate,
+                toDate = onDateFilterState.value.toDate,
                 queryOrder = orderSequence.value)
         }else{
             filterState.value = FilterBy.DateAndName(
                 name = searchBoxState.value.text,
                 fromDate = onDateFilterState.value.fromDate,
-                toDate = onDateFilterState.value.fromDate,
+                toDate = onDateFilterState.value.toDate,
                 queryOrder = orderSequence.value)
         }
     }
