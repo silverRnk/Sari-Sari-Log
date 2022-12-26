@@ -22,7 +22,7 @@ class GetTransactionInfoList(
                     is FilterBy.Date -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
-                                item.createdDate!! >= filterBy.fromDate && item.createdDate <= filterBy.toDate
+                               item.createdDate!! >= filterBy.fromDate && item.createdDate <= filterBy.toDate
                             }.sortedByDescending { item -> item.createdDate } }
                     }
                     is FilterBy.Name -> {
@@ -37,7 +37,9 @@ class GetTransactionInfoList(
                             it.filter { item ->
                                 item.createdDate!! >= filterBy.fromDate &&
                                         item.createdDate!! <= filterBy.toDate &&
-                                        item.customerName.lowercase() == filterBy.name.lowercase()
+                                        item.customerName.lowercase().contains(
+                                            Regex("\\S*"+filterBy.name.lowercase()+"\\S*")
+                                        )
                             }.sortedByDescending { item -> item.createdDate }
                         }
                     }
