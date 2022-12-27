@@ -2,13 +2,16 @@ package com.example.sari_saristorelog.feature_transaction_log.presentation.homeS
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -16,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TransactionItem(
@@ -23,6 +27,11 @@ fun TransactionItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
+    val dateFormatter = DateTimeFormatter.ofPattern("MMM, dd yyyy hh:mm")
+    val formattedCreatedDate = dateFormatter.format(transactionInfo.createdDate)
+    val formattedConfirmedDate = if(transactionInfo.confirmedDate != null) dateFormatter.format(transactionInfo.confirmedDate) else ""
+
+
     Box(modifier = modifier) {
         Canvas(modifier = Modifier.matchParentSize()){
             drawLine(color = Color.Black,
@@ -43,17 +52,37 @@ fun TransactionItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.width(10.dp))
 
-                Icon(painter = painterResource(id = com.example.sari_saristorelog.R.drawable.ic_baseline_face_24)
-                    , contentDescription = "customerIcon",
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp))
+                Box(modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape)
+                    .border(width = 1.dp, color = Color.Black, shape = CircleShape)){
+                    //Todo Change customer image implementation on Home Screen List
+                    Icon(painter = painterResource(id = transactionInfo.customerIcon)
+                        , contentDescription = "customerIcon",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.Center))
+                }
+
 
                 Spacer(modifier = Modifier.width(10.dp))
                 Column() {
-                    Text(text = transactionInfo.customerName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.h3)
-                    Text(text ="Created: " + transactionInfo.createdDate.toString(), style = MaterialTheme.typography.h3, fontSize = 12.sp)
-                    Text(text ="Confirmed: " + transactionInfo.confirmedDate?.toString() ?: "", style = MaterialTheme.typography.h3, fontSize = 12.sp)
+                    Text(
+                        text = transactionInfo.customerName,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.h3)
+
+                    Text(
+                        text = "Created: $formattedCreatedDate",
+                        style = MaterialTheme.typography.h3,
+                        fontSize = 12.sp)
+
+                    Text(
+                        text ="Confirmed: $formattedConfirmedDate",
+                        style = MaterialTheme.typography.h3,
+                        fontSize = 12.sp,
+                        color = if (transactionInfo.isConfirmed) Color.Black else Color.Transparent)
                 }
 
             }
