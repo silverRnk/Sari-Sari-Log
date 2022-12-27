@@ -5,16 +5,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.component.NameFilterTextField
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.component.TransactionItem
 import com.example.sari_saristorelog.feature_transaction_log.presentation.util.DateConverter.convertLocalDateTimeToLocalDate
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -47,12 +50,20 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             Box(modifier = Modifier.fillMaxWidth()){
-                TextField(value = textFieldState.text,
-                    onValueChange = {viewModel.onEvent(HomeScreenEvent.OnSearchValueChange(it))},
-                    placeholder = { Text(text = "Search for Name")},
+                NameFilterTextField(
+                    text = textFieldState.text,
+                    placeholder = textFieldState.hint,
+                    isPlaceholderVisible = textFieldState.isPlaceHolderVisible,
+                    onValueChange = {viewModel.onEvent(HomeScreenEvent.OnNameTextFieldValueChange(it))},
+                    onFocusChange = {viewModel.onEvent(HomeScreenEvent.OnNameTextFieldFocusChange(it))},
                     modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(60.dp)
+                        .padding(top = 5.dp, bottom = 5.dp)
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(Color.LightGray)
                         .align(Alignment.Center)
-                        .fillMaxWidth(0.7f))
+                )
 
                 IconButton(onClick = {viewModel.onEvent(HomeScreenEvent.OnFilterVisibilityToggle)}, modifier = Modifier.align(Alignment.CenterEnd)) {
 

@@ -1,6 +1,5 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 
@@ -58,21 +57,27 @@ class HomeScreenVM @Inject constructor(
                 updateFilterState()
                 getTransactionInfo(filterState.value)
             }
-            is HomeScreenEvent.OnSearchValueChange -> {
+            is HomeScreenEvent.OnNameTextFieldValueChange -> {
                 if(event.searchBox.isNotBlank()){
                     _searchBoxState.value = searchBoxState.value.copy(
                         text = event.searchBox,
-                        isEnable = true
+                        isEnable = true,
+                        isPlaceHolderVisible = false
                     )
                 }else{
                     _searchBoxState.value = searchBoxState.value.copy(
                         text = "",
-                        isEnable = false
+                        isEnable = false,
+                        isPlaceHolderVisible = true
                     )
                 }
                 updateFilterState()
                 getTransactionInfo(filterState.value)
 
+            }
+            is HomeScreenEvent.OnNameTextFieldFocusChange -> {
+                _searchBoxState.value = searchBoxState.value.copy(
+                    isPlaceHolderVisible = !event.focusState.isFocused || searchBoxState.value.text.isEmpty())
             }
             is HomeScreenEvent.OnSelectItem -> {
                 //@Todo Implement HomeScreenEvent OnSelectItem
