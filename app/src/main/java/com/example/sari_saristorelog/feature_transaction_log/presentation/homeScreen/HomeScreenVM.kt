@@ -1,5 +1,6 @@
 package com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 
@@ -16,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +26,8 @@ class HomeScreenVM @Inject constructor(
 ): ViewModel()
 {
 
-    private val _transactionInfoList = mutableStateOf(listOf<TransactionInfo>())
-    val transactionInfoList: State<List<TransactionInfo>> = _transactionInfoList
+    private val _transactionInfoList = mutableStateOf<Map<LocalDate, List<TransactionInfo>>>(mapOf())
+    val transactionInfoList: State<Map<LocalDate, List<TransactionInfo>>> = _transactionInfoList
 
     private val _searchBoxState = mutableStateOf(TextFieldState())
     val searchBoxState: State<TextFieldState> = _searchBoxState
@@ -112,6 +114,7 @@ class HomeScreenVM @Inject constructor(
                 _transactionInfoList.value = transactionInfos
             }
             .launchIn(viewModelScope)
+        Log.d("TransactionItem", transactionInfoList.value.toString())
     }
 
     private fun updateFilterState(){

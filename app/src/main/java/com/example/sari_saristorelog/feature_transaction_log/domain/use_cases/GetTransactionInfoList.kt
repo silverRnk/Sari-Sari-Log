@@ -6,18 +6,26 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.util.FilterB
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class GetTransactionInfoList(
     private val repository: LoggerRepository
 ) {
 
-    fun get(filterBy: FilterBy): Flow<List<TransactionInfo>>{
-        return when(filterBy.order){
+    fun get(filterBy: FilterBy): Flow<Map<LocalDate, List<TransactionInfo>>>{
+        return repository.getTransInfo().map {
+            it.sortedByDescending { item -> item.createdDate }.groupBy { info ->
+                info.createdDate!!.toLocalDate()
+            }
+        }
+        /*return when(filterBy.order){
             is QueryOrder.Desc -> {
                 when(filterBy){
                     is FilterBy.NoFilter -> {
-                        repository.getTransInfo().map { it.sortedByDescending { item -> item.createdDate } }
+                        repository.getTransInfo().map {
+                            it.sortedByDescending { item -> item.createdDate }
+                                .groupBy { it.createdDate.toLocalDate() } }
                     }
                     is FilterBy.Date -> {
                         repository.getTransInfo().map {
@@ -76,6 +84,6 @@ class GetTransactionInfoList(
 
             }
 
-        }
+        }*/
     }
 }

@@ -157,13 +157,35 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally){
-                items(listState){ item ->
-                    TransactionItem(transactionInfo = item, onClick = { /*TODO*/ },
+
+                listState.forEach { localDate, transactionInfos ->
+                    item {
+                        Column() {
+                            
+                            Text(text = localDate.toString())
+                            
+                            transactionInfos.forEach {
+                                TransactionItem(
+                                    transactionInfo = it,
+                                    onClick = { /*TODO*/ },
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.9f)
+                                        .height(70.dp)
+                                        .background(if (!it.isConfirmed) Color.White else Color.LightGray))
+                            }
+                            
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
+                    }
+                }
+
+                /*items(){ item ->
+                    TransactionItem(transactionInfo = item, onClick = { *//*TODO*//* },
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
                             .height(70.dp)
                             .background(if (!item.isConfirmed) Color.White else Color.LightGray))
-                }
+                }*/
             }
 
         }
