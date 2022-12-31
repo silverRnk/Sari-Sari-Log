@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sari_saristorelog.core.util.Route
 import com.example.sari_saristorelog.feature_transaction_log.domain.model.TransactionInfo
 import com.example.sari_saristorelog.feature_transaction_log.domain.use_cases.TransactionLogUseCases
 import com.example.sari_saristorelog.feature_transaction_log.domain.util.FilterBy
@@ -13,10 +14,11 @@ import com.example.sari_saristorelog.feature_transaction_log.domain.util.QueryOr
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.state.DateFilterState
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.state.TextFieldState
 import com.example.sari_saristorelog.feature_transaction_log.presentation.util.DateConverter.convertLocalDateToLocalDateTime
+import com.example.sari_saristorelog.feature_transaction_log.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -43,6 +45,9 @@ class HomeScreenVM @Inject constructor(
         orderSequence.value))
 
     private var getJob: Job? = null
+
+    private val _uiState = MutableSharedFlow<UiState>()
+    val uiState = _uiState.asSharedFlow()
 
     init {
         getTransactionInfo(filterState.value)
@@ -82,7 +87,10 @@ class HomeScreenVM @Inject constructor(
                     isPlaceHolderVisible = !event.focusState.isFocused || searchBoxState.value.text.isEmpty())
             }
             is HomeScreenEvent.OnSelectItem -> {
-                //@Todo Implement HomeScreenEvent OnSelectItem
+                viewModelScope.launch{
+                    _uiState.emit(UiState.OnNavigate(Route.CONFIRM_TRANSACTION_SCREEN +
+                            "?TransactionId = ${event.transactionInfo.transactionId}"))
+                }
             }
             is HomeScreenEvent.OnFromFilterDateSelected -> {
                 _onDateFilterState.value = onDateFilterState.value.copy(

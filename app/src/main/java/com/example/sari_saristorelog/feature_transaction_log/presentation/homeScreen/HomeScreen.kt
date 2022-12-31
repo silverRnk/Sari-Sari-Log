@@ -17,16 +17,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.component.NameFilterTextField
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.component.TransactionItem
 import com.example.sari_saristorelog.feature_transaction_log.presentation.util.DateConverter.convertLocalDateTimeToLocalDate
+import com.example.sari_saristorelog.feature_transaction_log.presentation.util.UiState
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: HomeScreenVM = hiltViewModel()
 ){
@@ -41,6 +45,17 @@ fun HomeScreen(
     val fromDatePickerDialogState = rememberMaterialDialogState()
 
     val toDatePickerDialog = rememberMaterialDialogState()
+
+    LaunchedEffect(key1 = 1){
+        viewModel.uiState.collectLatest { event ->
+            when(event){
+                is UiState.OnNavigate -> {
+                    navController.navigate(event.route)
+                }
+                else -> Unit
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -167,7 +182,7 @@ fun HomeScreen(
                             transactionInfos.forEach {
                                 TransactionItem(
                                     transactionInfo = it,
-                                    onClick = { /*TODO*/ },
+                                    onClick = {viewModel.onEvent(HomeScreenEvent.OnSelectItem(it))},
                                     modifier = Modifier
                                         .fillMaxWidth(0.9f)
                                         .height(70.dp)
