@@ -23,7 +23,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sari_saristorelog.core.util.BottomNavigationItems
+import com.example.sari_saristorelog.core.util.Route
 import com.example.sari_saristorelog.feature_transaction_log.presentation.AddEditTransaction.AddEditTransactionScreen
+import com.example.sari_saristorelog.feature_transaction_log.presentation.ConfirrmTransaction.ConfirmTransactionScreen
 import com.example.sari_saristorelog.feature_transaction_log.presentation.homeScreen.HomeScreen
 import com.example.sari_saristorelog.ui.theme.SariSariStoreLogTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,10 +83,13 @@ class MainActivity : ComponentActivity() {
                             startDestination = BottomNavigationItems.Home.route,
                             modifier = Modifier.padding(innerPadding)){
                             composable(BottomNavigationItems.Home.route){
-                                HomeScreen()
+                                HomeScreen(navController)
                             }
                             composable(BottomNavigationItems.Add.route){
                                 AddEditTransactionScreen(navController = navController, scaffoldState = scaffoldState)
+                            }
+                            composable(Route.CONFIRM_TRANSACTION_SCREEN){
+                                ConfirmTransactionScreen(navController = navController)
                             }
                         }
                         
