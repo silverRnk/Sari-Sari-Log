@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,8 +32,8 @@ class AddEditTransactionViewModel @Inject constructor(
     private val _itemState = mutableStateOf(ItemState())
     val itemState: State<ItemState> = _itemState
 
-    private val _dateState = mutableStateOf(DateState())
-    val dateState: State<DateState> = _dateState
+/*    private val _dateState = mutableStateOf(DateState())
+    val dateState: State<DateState> = _dateState*/
 
     private val _addItemDialogState = mutableStateOf(AddItemDialogState())
     val addItemDialogState: State<AddItemDialogState> = _addItemDialogState
@@ -86,17 +87,21 @@ class AddEditTransactionViewModel @Inject constructor(
                 }
             }
             is AddEditTransactionEvent.OnChangeDate -> {
-                _dateState.value = dateState.value.copy(
-                    currentDate = event.date
+                val newCreatedDate = LocalDateTime.of(event.date, customerInfoState.value.info.createdDate!!.toLocalTime())
+
+                _customerInfoState.value = customerInfoState.value.copy(
+                    info = customerInfoState.value.info.copy(createdDate = newCreatedDate)
                 )
             }
             is AddEditTransactionEvent.OnChangeTime -> {
-                _dateState.value = dateState.value.copy(
-                    currentTime = event.time
-                )
+                val newCreatedDate = LocalDateTime.of(customerInfoState.value.info.createdDate!!.toLocalDate(), event.time)
+                _customerInfoState.value = customerInfoState.value.copy(
+                    info = customerInfoState.value.info.copy(createdDate = newCreatedDate))
             }
             is AddEditTransactionEvent.OnToggleDate -> {
-                _dateState.value = dateState.value.copy(isVisible = !dateState.value.isVisible)
+                _customerInfoState.value = customerInfoState.value.copy(
+                    isDateStatusVisible = !customerInfoState.value.isDateStatusVisible
+                )
             }
         }
     }

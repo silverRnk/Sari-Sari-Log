@@ -58,26 +58,15 @@ fun AddEditTransactionScreen(
 
     val itemsState = viewModel.itemState
     val customerInfoState = viewModel.customerInfoState
-    val dateState = viewModel.dateState
     val addItemDialogState = viewModel.addItemDialogState
 
     val animatedListCount = animateIntAsState(targetValue = itemsState.value.items.size)
 
-    val dateFormatter by remember {
+    val dateTimeFormatter by remember {
         mutableStateOf(
             derivedStateOf {
-                DateTimeFormatter.ofPattern("MMM, dd yyyy")
-                    .format(dateState.value.currentDate)
-            }
-        )
-    }
-
-    val timeFormatter by remember {
-        mutableStateOf(
-            derivedStateOf {
-                DateTimeFormatter
-                    .ofPattern("hh:mm")
-                    .format(dateState.value.currentTime)
+                DateTimeFormatter.ofPattern("MMM, dd yyyy hh:mm")
+                    .format(customerInfoState.value.info.createdDate)
             }
         )
     }
@@ -87,11 +76,11 @@ fun AddEditTransactionScreen(
     val addItemDialog = rememberMaterialDialogState()
 
     var pickedDate by remember {
-        mutableStateOf(dateState.value.currentDate)
+        mutableStateOf(customerInfoState.value.info.createdDate!!.toLocalDate())
     }
 
     var pickedTime by remember {
-        mutableStateOf(dateState.value.currentTime)
+        mutableStateOf(customerInfoState.value.info.createdDate!!.toLocalTime())
     }
 
     LaunchedEffect(key1 = 1){
@@ -276,7 +265,7 @@ fun AddEditTransactionScreen(
                 Box(modifier = Modifier
                     .wrapContentSize()
                     .clip(CircleShape)
-                    .background(if (dateState.value.isVisible) Color.LightGray else Color.Transparent)
+                    .background(if (customerInfoState.value.isDateStatusVisible) Color.LightGray else Color.Transparent)
                     .clickable { viewModel.onEvent(AddEditTransactionEvent.OnToggleDate) }
                 ){
                     Icon(painter = painterResource(id = R.drawable.ic_arrow_down_24),
@@ -290,7 +279,7 @@ fun AddEditTransactionScreen(
 
         //Todo add visibleState
         AnimatedVisibility(
-            visible = dateState.value.isVisible,
+            visible = customerInfoState.value.isDateStatusVisible,
             enter = fadeIn() + slideInVertically(),
             exit = fadeOut() + slideOutVertically(),
             modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
@@ -304,20 +293,12 @@ fun AddEditTransactionScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start) {
                     Text(
-                        text = dateFormatter.value,
+                        text = dateTimeFormatter.value,
                         style = MaterialTheme.typography.h3,
                         fontSize = 18.sp,
                         modifier = Modifier
                             .padding(start = 5.dp)
-                            )
-
-                    Spacer(modifier = Modifier.width(5.dp))
-
-                    Text(
-                        text = timeFormatter.value,
-                        style = MaterialTheme.typography.h3,
-                        fontSize = 18.sp,
-                        )}
+                            ) }
             }
 
         }
