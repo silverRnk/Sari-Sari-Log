@@ -14,30 +14,28 @@ class GetTransactionInfoList(
 ) {
 
     fun get(filterBy: FilterBy): Flow<Map<LocalDate, List<TransactionInfo>>>{
-        return repository.getTransInfo().map {
-            it.sortedByDescending { item -> item.createdDate }.groupBy { info ->
-                info.createdDate!!.toLocalDate()
-            }
-        }
-        /*return when(filterBy.order){
+
+        return when(filterBy.order){
             is QueryOrder.Desc -> {
                 when(filterBy){
                     is FilterBy.NoFilter -> {
                         repository.getTransInfo().map {
                             it.sortedByDescending { item -> item.createdDate }
-                                .groupBy { it.createdDate.toLocalDate() } }
+                                .groupBy { list -> list.createdDate!!.toLocalDate() } }
                     }
                     is FilterBy.Date -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
                                item.createdDate!! >= filterBy.fromDate && item.createdDate <= filterBy.toDate
-                            }.sortedByDescending { item -> item.createdDate } }
+                            }.sortedByDescending { item -> item.createdDate }
+                             .groupBy { list -> list.createdDate!!.toLocalDate() }}
                     }
                     is FilterBy.Name -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
                                 item.customerName.lowercase() == filterBy.name.lowercase()
                             }.sortedByDescending { item -> item.createdDate }
+                             .groupBy { list -> list.createdDate!!.toLocalDate() }
                         }
                     }
                     is FilterBy.DateAndName -> {
@@ -49,6 +47,7 @@ class GetTransactionInfoList(
                                             Regex("\\S*"+filterBy.name.lowercase()+"\\S*")
                                         )
                             }.sortedByDescending { item -> item.createdDate }
+                             .groupBy { list -> list.createdDate!!.toLocalDate() }
                         }
                     }
                 }
@@ -56,19 +55,21 @@ class GetTransactionInfoList(
             is QueryOrder.Asc -> {
                 when(filterBy){
                     is FilterBy.NoFilter -> {
-                        repository.getTransInfo().map { it.sortedByDescending { item -> item.createdDate } }
-                    }
+                        repository.getTransInfo().map {
+                            it.sortedByDescending { item -> item.createdDate }
+                              .groupBy { list -> list.createdDate!!.toLocalDate() } } }
                     is FilterBy.Date -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
                                 item.createdDate!! >= filterBy.fromDate && item.createdDate!! <= filterBy.toDate
-                            }.sortedBy { item -> item.createdDate } }
-                    }
+                            }.sortedBy { item -> item.createdDate }
+                             .groupBy { list -> list.createdDate!!.toLocalDate() } } }
                     is FilterBy.Name -> {
                         repository.getTransInfo().map {
                             it.filter { item ->
                                 item.customerName.lowercase() == filterBy.name.lowercase()
                             }.sortedBy { item -> item.createdDate }
+                             .groupBy { list -> list.createdDate!!.toLocalDate() }
                         }
                     }
                     is FilterBy.DateAndName -> {
@@ -78,12 +79,13 @@ class GetTransactionInfoList(
                                         item.createdDate <= filterBy.toDate &&
                                         item.customerName.lowercase() == filterBy.name.lowercase()
                             }.sortedBy { item -> item.createdDate }
+                             .groupBy { list -> list.createdDate!!.toLocalDate() }
                         }
                     }
                 }
 
             }
 
-        }*/
+        }
     }
 }
