@@ -39,7 +39,8 @@ class AppModule {
             getTransactionInfoList = GetTransactionInfoList(repository),
             filterByDate = FilterByDate(),
             filterByName = FilterByName(),
-            addTransaction = AddTransaction(repository)
+            addTransaction = AddTransaction(repository),
+            getTransaction = GetTransaction(repository)
         )
     }
 }

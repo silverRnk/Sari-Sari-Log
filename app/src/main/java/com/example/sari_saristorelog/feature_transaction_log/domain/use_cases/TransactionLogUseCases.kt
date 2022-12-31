@@ -6,5 +6,6 @@ data class TransactionLogUseCases(
     val getTransactionInfoList: GetTransactionInfoList,
     val filterByDate: FilterByDate,
     val filterByName: FilterByName,
-    val addTransaction: AddTransaction
+    val addTransaction: AddTransaction,
+    val getTransaction: GetTransaction
 )
