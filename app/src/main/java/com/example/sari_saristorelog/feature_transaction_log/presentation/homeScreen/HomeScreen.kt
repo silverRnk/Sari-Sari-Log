@@ -2,6 +2,7 @@ package com.example.sari_saristorelog.feature_transaction_log.presentation.homeS
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -182,11 +183,11 @@ fun HomeScreen(
                             transactionInfos.forEach {
                                 TransactionItem(
                                     transactionInfo = it,
-                                    onClick = {viewModel.onEvent(HomeScreenEvent.OnSelectItem(it))},
                                     modifier = Modifier
                                         .fillMaxWidth(0.9f)
                                         .height(70.dp)
-                                        .background(if (!it.isConfirmed) Color.White else Color.LightGray))
+                                        .background(if (!it.isConfirmed) Color.White else Color.LightGray)
+                                        .clickable { viewModel.onEvent(HomeScreenEvent.OnSelectItem(it)) })
                             }
                             
                             Spacer(modifier = Modifier.height(10.dp))
