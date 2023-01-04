@@ -89,7 +89,7 @@ class HomeScreenVM @Inject constructor(
             is HomeScreenEvent.OnSelectItem -> {
                 viewModelScope.launch{
                     _uiState.emit(UiState.OnNavigate(Route.CONFIRM_TRANSACTION_SCREEN +
-                            "?TransactionId = ${event.transactionInfo.transactionId}"))
+                            "?TransactionId=${event.transactionInfo.transactionId}"))
                 }
             }
             is HomeScreenEvent.OnFromFilterDateSelected -> {
