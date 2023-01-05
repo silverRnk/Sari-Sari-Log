@@ -10,3 +10,8 @@ object Inter{
     val medium = FontFamily(Font(R.font.inter_medium))
     val bold = FontFamily(Font(R.font.inter_bold))
 }
+
+object Lato{
+    val bold = FontFamily(Font(R.font.lato_bold))
+    val regular = FontFamily(Font(R.font.lato_regular))
+}
