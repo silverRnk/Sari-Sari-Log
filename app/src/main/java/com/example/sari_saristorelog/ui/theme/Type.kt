@@ -1,6 +1,7 @@
 package com.example.sari_saristorelog.ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -31,25 +32,34 @@ val Typography = Typography(
 
 val appTypography = androidx.compose.material.Typography(
     h1 = TextStyle(
+        fontFamily = Lato.bold,
+        fontSize = 30.sp),
+    h2 = TextStyle(
+        fontFamily = Lato.bold,
+        fontSize = 15.sp,
+        color = Color.LightGray),
+    h3 = TextStyle(
         fontFamily = Inter.bold,
         fontSize = 20.sp),
-
-    h2 = TextStyle(
+    h4 = TextStyle(
         fontFamily = Inter.medium,
         fontSize = 20.sp),
-
-    h3 = TextStyle(
+    h5 = TextStyle(
         fontFamily = Inter.regular,
         fontSize = 20.sp
     ),
-
     body1 = TextStyle(
-        fontFamily = Inter.regular,
+        fontFamily = Lato.regular,
         fontSize = 20.sp),
 
     body2 = TextStyle(
         fontFamily = Inter.light,
         fontSize = 20.sp
+    ),
+    button = TextStyle(
+        fontFamily = Inter.bold,
+        fontSize = 30.sp,
+        color = Color.White
     )
 
 
