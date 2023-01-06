@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,9 +63,6 @@ class MainActivity : ComponentActivity() {
 
                     val scaffoldState = rememberScaffoldState()
 
-                    val snackbarData = MutableSharedFlow<SnackbarHostState>()
-
-
                     Scaffold(
                         scaffoldState = scaffoldState,
                         bottomBar = { BottomNavigation(backgroundColor = Color.White
@@ -107,6 +105,7 @@ class MainActivity : ComponentActivity() {
                             composable(
                                 route = BottomNavigationItems.Add.route){
                                 AddEditTransactionScreen(navController = navController, scaffoldState = scaffoldState)
+
                             }
                             composable(
                                 route = Route.CONFIRM_TRANSACTION_SCREEN +

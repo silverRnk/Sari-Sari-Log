@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -70,6 +71,9 @@ fun AddEditTransactionScreen(
             }
         )
     }
+
+    val brush = Brush.verticalGradient(colors = listOf(Color.Gray,Color.LightGray, Color.White),
+        startY = 0f, endY = 100f)
 
     val datePickerDialog = rememberMaterialDialogState()
     val timePickerDialog = rememberMaterialDialogState()
@@ -196,7 +200,7 @@ fun AddEditTransactionScreen(
 
 
 
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(modifier = Modifier.fillMaxSize().background(brush),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -397,6 +401,7 @@ fun AddEditTransactionScreen(
             }
 
         }
+
 
         Box(modifier = Modifier
             .fillMaxWidth()
